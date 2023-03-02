@@ -1,0 +1,773 @@
+<ObjectDefinition>
+  <information>
+    <icon>none</icon>
+    <description></description>
+    <displayField>object_id</displayField>
+    <serviceTaskType/>
+    <order>0</order>
+    <visibility>5</visibility>
+    <configType>xml</configType>
+    <createTemplateId/>
+    <createTemplateObject/>
+    <defaultDisplay>false</defaultDisplay>
+    <dynamic>false</dynamic>
+    <importIfMandatoryPresent>false</importIfMandatoryPresent>
+    <maxInstances>0</maxInstances>
+    <relatedObjects/>
+    <name>Overlay_L3_Tenants</name>
+    <group>Default</group>
+    <importonce>false</importonce>
+    <importrank>3</importrank>
+    <reorderinstances>false</reorderinstances>
+    <sortascending>false</sortascending>
+    <sortauto>false</sortauto>
+    <sortnumerical>false</sortnumerical>
+    <sortvariable>params._order</sortvariable>
+  </information>
+  <variables frozen="0">
+    <variable displayName="vrf" name="params.object_id" startIncrement="0" type="String" mandatoryArray="false" visible="true" description="" groupSeparator="" groupDisplayName="" maxLength="100" displayOrder="0" increment="0" refServiceURI="" keepOnImport="false" editable="false" onlyDetailView="false" localVarNameMatch="" remoteVarNameMatch="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" displayNameHeader="" fullDisplayName="" isCompositeKey="false" isMandatory="true" isUserLocked="false" isGrouped="false" isSearchable="false" isUniqueGlobal="false"/>
+    <variable displayName="rd" name="params.rd" startIncrement="0" type="String" mandatoryArray="false" visible="true" description="" groupSeparator="" groupDisplayName="" maxLength="100" displayOrder="0" increment="0" refServiceURI="" keepOnImport="false" editable="false" onlyDetailView="false" localVarNameMatch="" remoteVarNameMatch="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" displayNameHeader="" fullDisplayName="" isCompositeKey="false" default="auto" isMandatory="true" isUserLocked="false" isGrouped="false" isSearchable="false" isUniqueGlobal="false"/>
+    <variable displayName="asn" name="params.asn" startIncrement="0" type="String" mandatoryArray="false" visible="true" description="" groupSeparator="" groupDisplayName="" maxLength="100" displayOrder="9" increment="0" refServiceURI="" keepOnImport="false" editable="false" onlyDetailView="false" localVarNameMatch="" remoteVarNameMatch="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" displayNameHeader="" fullDisplayName="" isCompositeKey="false" isMandatory="false" isUserLocked="true" isGrouped="false" isSearchable="false" isUniqueGlobal="false"/>
+    <variable displayName="type" name="params.bgp_af_list.0.type" startIncrement="0" type="String" mandatoryArray="false" visible="true" description="" groupSeparator="" groupDisplayName="" maxLength="100" displayOrder="0" increment="0" refServiceURI="" keepOnImport="false" editable="false" onlyDetailView="false" localVarNameMatch="" remoteVarNameMatch="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" displayNameHeader="" fullDisplayName="" isCompositeKey="false" default="ipv4-ucast" isMandatory="false" isUserLocked="true" isGrouped="false" isSearchable="false" isUniqueGlobal="false"/>
+    <variable displayName="protocol" name="params.bgp_af_list.0.redistribution_list.0.protocol" startIncrement="0" type="String" mandatoryArray="false" visible="true" description="" groupSeparator="" groupDisplayName="" maxLength="100" displayOrder="0" increment="0" refServiceURI="" keepOnImport="false" editable="false" onlyDetailView="false" localVarNameMatch="" remoteVarNameMatch="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" displayNameHeader="" fullDisplayName="" isCompositeKey="false" default="direct" isMandatory="false" isUserLocked="false" isGrouped="false" isSearchable="false" isUniqueGlobal="false">
+      <values>
+        <values displayValue="direct">direct</values>
+        <values displayValue="ospf">ospf</values>
+        <values displayValue="static">static</values>
+      </values>
+    </variable>
+    <variable displayName="id" name="params.bgp_af_list.0.redistribution_list.0.inst_id" startIncrement="0" type="String" mandatoryArray="false" visible="true" description="" groupSeparator="" groupDisplayName="" maxLength="100" displayOrder="0" increment="0" refServiceURI="" keepOnImport="false" editable="true" onlyDetailView="false" localVarNameMatch="" remoteVarNameMatch="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" displayNameHeader="" fullDisplayName="" isCompositeKey="false" isMandatory="false" isUserLocked="false" isGrouped="false" isSearchable="false" isUniqueGlobal="false">
+      <values>
+        <values displayValue="none">none</values>
+      </values>
+    </variable>
+    <variable displayName="route_map" name="params.bgp_af_list.0.redistribution_list.0.route_map" startIncrement="0" type="ObjectRef" mandatoryArray="false" visible="true" description="" groupSeparator="" groupDisplayName="" maxLength="100" displayOrder="0" increment="0" refServiceURI="" keepOnImport="false" editable="false" onlyDetailView="false" localVarNameMatch="" remoteVarNameMatch="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" displayNameHeader="" fullDisplayName="" isCompositeKey="false" isMandatory="false" isUserLocked="false" isGrouped="false" isSearchable="false" isUniqueGlobal="false">
+      <classes>
+        <class>General_Route_Maps</class>
+      </classes>
+    </variable>
+    <variable displayName="network" name="params.bgp_af_list.0.network_list.0.network" startIncrement="0" type="String" mandatoryArray="false" visible="true" description="" groupSeparator="" groupDisplayName="" maxLength="100" displayOrder="0" increment="0" refServiceURI="" keepOnImport="false" editable="false" onlyDetailView="false" localVarNameMatch="" remoteVarNameMatch="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" displayNameHeader="" fullDisplayName="" isCompositeKey="false" isMandatory="false" isUserLocked="false" isGrouped="false" isSearchable="false" isUniqueGlobal="false"/>
+    <variable displayName="max_path" name="params.bgp_af_list.0.max_path" startIncrement="0" type="Integer" mandatoryArray="false" visible="true" description="" groupSeparator="" groupDisplayName="" maxLength="100" displayOrder="0" increment="0" refServiceURI="" keepOnImport="false" editable="false" onlyDetailView="false" localVarNameMatch="" remoteVarNameMatch="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" displayNameHeader="" fullDisplayName="" isCompositeKey="false" default="2" isMandatory="false" isUserLocked="false" isGrouped="false" isSearchable="false" isUniqueGlobal="false"/>
+    <variable displayName="max_path_ibgp" name="params.bgp_af_list.0.max_path_ibgp" startIncrement="0" type="Integer" mandatoryArray="false" visible="true" description="" groupSeparator="" groupDisplayName="" maxLength="100" displayOrder="0" increment="0" refServiceURI="" keepOnImport="false" editable="false" onlyDetailView="false" localVarNameMatch="" remoteVarNameMatch="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" displayNameHeader="" fullDisplayName="" isCompositeKey="false" default="2" isMandatory="false" isUserLocked="false" isGrouped="false" isSearchable="false" isUniqueGlobal="false"/>
+    <variable displayName="vtep_id" name="params.vtep_id" startIncrement="0" type="String" mandatoryArray="false" visible="true" description="" groupSeparator="|" groupDisplayName="" maxLength="100" displayOrder="11" increment="0" refServiceURI="" keepOnImport="false" editable="false" onlyDetailView="false" localVarNameMatch="" remoteVarNameMatch="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" displayNameHeader="" fullDisplayName="" isCompositeKey="false" default="1" isMandatory="false" isUserLocked="true" isGrouped="false" isSearchable="false" isUniqueGlobal="false"/>
+    <variable displayName="vni_id (VxLAN ID)" name="params.vni" startIncrement="0" type="String" mandatoryArray="false" visible="true" description="" groupSeparator="" groupDisplayName="" maxLength="100" displayOrder="0" increment="0" refServiceURI="" keepOnImport="false" editable="false" onlyDetailView="false" localVarNameMatch="" remoteVarNameMatch="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" displayNameHeader="" fullDisplayName="" isCompositeKey="false" isMandatory="true" isUserLocked="false" isGrouped="false" isSearchable="false" isUniqueGlobal="false"/>
+    <variable displayName="description" name="params.description" startIncrement="0" type="String" mandatoryArray="false" visible="true" description="" groupSeparator="" groupDisplayName="" maxLength="100" displayOrder="0" increment="0" refServiceURI="" keepOnImport="false" editable="false" onlyDetailView="false" localVarNameMatch="" remoteVarNameMatch="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" displayNameHeader="" fullDisplayName="" isCompositeKey="false" isMandatory="false" isUserLocked="false" isGrouped="false" isSearchable="false" isUniqueGlobal="false"/>
+  </variables>
+  <example>
+    <content>  &lt;bgp-items&gt;
+    &lt;inst-items&gt;
+      &lt;asn&gt;45985&lt;/asn&gt;
+      &lt;dom-items&gt;
+        &lt;Dom-list&gt;
+          &lt;name&gt;SDS-Private&lt;/name&gt;
+          &lt;rtctrl-items&gt;
+            &lt;logNeighborChanges&gt;enabled&lt;/logNeighborChanges&gt;
+          &lt;/rtctrl-items&gt;
+          &lt;af-items&gt;
+            &lt;DomAf-list&gt;
+              &lt;type&gt;ipv4-ucast&lt;/type&gt;
+              &lt;maxEcmp&gt;2&lt;/maxEcmp&gt;
+            &lt;/DomAf-list&gt;
+          &lt;/af-items&gt;
+        &lt;/Dom-list&gt;
+        &lt;Dom-list&gt;
+          &lt;name&gt;default&lt;/name&gt;
+          &lt;rtctrl-items&gt;
+            &lt;logNeighborChanges&gt;enabled&lt;/logNeighborChanges&gt;
+          &lt;/rtctrl-items&gt;
+        &lt;/Dom-list&gt;
+      &lt;/dom-items&gt;
+    &lt;/inst-items&gt;
+  &lt;/bgp-items&gt;
+
+
+-----------------------------------------
+&lt;System&gt;
+  &lt;eps-items&gt;
+    &lt;epId-items&gt;
+      &lt;Ep-list&gt;
+        &lt;epId&gt;1&lt;/epId&gt;
+        &lt;nws-items&gt;
+          &lt;vni-items&gt;
+            &lt;Nw-list&gt;
+              &lt;vni&gt;50000&lt;/vni&gt;
+              &lt;associateVrfFlag&gt;true&lt;/associateVrfFlag&gt;
+              &lt;isLegacyMode&gt;false&lt;/isLegacyMode&gt;
+            &lt;/Nw-list&gt;
+          &lt;/vni-items&gt;
+        &lt;/nws-items&gt;
+      &lt;/Ep-list&gt;
+    &lt;/epId-items&gt;
+  &lt;/eps-items&gt;
+  &lt;inst-items&gt;
+    &lt;Inst-list&gt;
+      &lt;name&gt;myvrf_50000&lt;/name&gt;
+      &lt;encap&gt;vxlan-50000&lt;/encap&gt;
+      &lt;descr&gt;test&lt;/descr&gt;
+      &lt;dom-items&gt;
+        &lt;Dom-list&gt;
+          &lt;name&gt;myvrf_50000&lt;/name&gt;
+          &lt;rd&gt;rd:unknown:0:0&lt;/rd&gt;
+          &lt;af-items&gt;
+            &lt;DomAf-list&gt;
+              &lt;type&gt;ipv4-ucast&lt;/type&gt;
+              &lt;ctrl-items&gt;
+                &lt;AfCtrl-list&gt;
+                  &lt;type&gt;l2vpn-evpn&lt;/type&gt;
+                  &lt;rttp-items&gt;
+                    &lt;RttP-list&gt;
+                      &lt;type&gt;export&lt;/type&gt;
+                      &lt;ent-items&gt;
+                        &lt;RttEntry-list&gt;
+                          &lt;rtt&gt;route-target:unknown:0:0&lt;/rtt&gt;
+                        &lt;/RttEntry-list&gt;
+                      &lt;/ent-items&gt;
+                    &lt;/RttP-list&gt;
+                    &lt;RttP-list&gt;
+                      &lt;type&gt;import&lt;/type&gt;
+                      &lt;ent-items&gt;
+                        &lt;RttEntry-list&gt;
+                          &lt;rtt&gt;route-target:unknown:0:0&lt;/rtt&gt;
+                        &lt;/RttEntry-list&gt;
+                      &lt;/ent-items&gt;
+                    &lt;/RttP-list&gt;
+                  &lt;/rttp-items&gt;
+                &lt;/AfCtrl-list&gt;
+                &lt;AfCtrl-list&gt;
+                  &lt;type&gt;ipv4-ucast&lt;/type&gt;
+                  &lt;rttp-items&gt;
+                    &lt;RttP-list&gt;
+                      &lt;type&gt;export&lt;/type&gt;
+                      &lt;ent-items&gt;
+                        &lt;RttEntry-list&gt;
+                          &lt;rtt&gt;route-target:unknown:0:0&lt;/rtt&gt;
+                        &lt;/RttEntry-list&gt;
+                      &lt;/ent-items&gt;
+                    &lt;/RttP-list&gt;
+                    &lt;RttP-list&gt;
+                      &lt;type&gt;import&lt;/type&gt;
+                      &lt;ent-items&gt;
+                        &lt;RttEntry-list&gt;
+                          &lt;rtt&gt;route-target:unknown:0:0&lt;/rtt&gt;
+                        &lt;/RttEntry-list&gt;
+                      &lt;/ent-items&gt;
+                    &lt;/RttP-list&gt;
+                  &lt;/rttp-items&gt;
+                &lt;/AfCtrl-list&gt;
+              &lt;/ctrl-items&gt;
+            &lt;/DomAf-list&gt;
+            &lt;DomAf-list&gt;
+              &lt;type&gt;ipv6-ucast&lt;/type&gt;
+              &lt;ctrl-items&gt;
+                &lt;AfCtrl-list&gt;
+                  &lt;type&gt;ipv6-ucast&lt;/type&gt;
+                  &lt;rttp-items&gt;
+                    &lt;RttP-list&gt;
+                      &lt;type&gt;export&lt;/type&gt;
+                      &lt;ent-items&gt;
+                        &lt;RttEntry-list&gt;
+                          &lt;rtt&gt;route-target:unknown:0:0&lt;/rtt&gt;
+                        &lt;/RttEntry-list&gt;
+                      &lt;/ent-items&gt;
+                    &lt;/RttP-list&gt;
+                    &lt;RttP-list&gt;
+                      &lt;type&gt;import&lt;/type&gt;
+                      &lt;ent-items&gt;
+                        &lt;RttEntry-list&gt;
+                          &lt;rtt&gt;route-target:unknown:0:0&lt;/rtt&gt;
+                        &lt;/RttEntry-list&gt;
+                      &lt;/ent-items&gt;
+                    &lt;/RttP-list&gt;
+                  &lt;/rttp-items&gt;
+                &lt;/AfCtrl-list&gt;
+                &lt;AfCtrl-list&gt;
+                  &lt;type&gt;l2vpn-evpn&lt;/type&gt;
+                  &lt;rttp-items&gt;
+                    &lt;RttP-list&gt;
+                      &lt;type&gt;export&lt;/type&gt;
+                      &lt;ent-items&gt;
+                        &lt;RttEntry-list&gt;
+                          &lt;rtt&gt;route-target:unknown:0:0&lt;/rtt&gt;
+                        &lt;/RttEntry-list&gt;
+                      &lt;/ent-items&gt;
+                    &lt;/RttP-list&gt;
+                    &lt;RttP-list&gt;
+                      &lt;type&gt;import&lt;/type&gt;
+                      &lt;ent-items&gt;
+                        &lt;RttEntry-list&gt;
+                          &lt;rtt&gt;route-target:unknown:0:0&lt;/rtt&gt;
+                        &lt;/RttEntry-list&gt;
+                      &lt;/ent-items&gt;
+                    &lt;/RttP-list&gt;
+                  &lt;/rttp-items&gt;
+                &lt;/AfCtrl-list&gt;
+              &lt;/ctrl-items&gt;
+            &lt;/DomAf-list&gt;
+          &lt;/af-items&gt;
+        &lt;/Dom-list&gt;
+      &lt;/dom-items&gt;
+    &lt;/Inst-list&gt;
+  &lt;/inst-items&gt;
+  &lt;nd-items&gt;
+    &lt;inst-items&gt;
+      &lt;dom-items&gt;
+        &lt;Dom-list&gt;
+          &lt;name&gt;myvrf_50000&lt;/name&gt;
+          &lt;if-items&gt;
+            &lt;If-list&gt;
+              &lt;id&gt;vlan2001&lt;/id&gt;
+              &lt;ctrl&gt;&lt;/ctrl&gt;
+            &lt;/If-list&gt;
+          &lt;/if-items&gt;
+        &lt;/Dom-list&gt;
+      &lt;/dom-items&gt;
+    &lt;/inst-items&gt;
+  &lt;/nd-items&gt;
+  &lt;ipv4-items&gt;
+    &lt;inst-items&gt;
+      &lt;dom-items&gt;
+        &lt;Dom-list&gt;
+          &lt;name&gt;myvrf_50000&lt;/name&gt;
+          &lt;if-items&gt;
+            &lt;If-list&gt;
+              &lt;id&gt;vlan2001&lt;/id&gt;
+              &lt;forward&gt;enabled&lt;/forward&gt;
+            &lt;/If-list&gt;
+          &lt;/if-items&gt;
+        &lt;/Dom-list&gt;
+      &lt;/dom-items&gt;
+    &lt;/inst-items&gt;
+  &lt;/ipv4-items&gt;
+  &lt;intf-items&gt;
+    &lt;svi-items&gt;
+      &lt;If-list&gt;
+        &lt;id&gt;vlan2001&lt;/id&gt;
+        &lt;adminSt&gt;up&lt;/adminSt&gt;
+        &lt;mtu&gt;9216&lt;/mtu&gt;
+        &lt;rtvrfMbr-items&gt;
+          &lt;tDn&gt;/System/inst-items/Inst-list[name=&apos;myvrf_50000&apos;]&lt;/tDn&gt;
+        &lt;/rtvrfMbr-items&gt;
+      &lt;/If-list&gt;
+    &lt;/svi-items&gt;
+  &lt;/intf-items&gt;
+  &lt;icmpv4-items&gt;
+    &lt;inst-items&gt;
+      &lt;dom-items&gt;
+        &lt;Dom-list&gt;
+          &lt;name&gt;myvrf_50000&lt;/name&gt;
+          &lt;if-items&gt;
+            &lt;If-list&gt;
+              &lt;id&gt;vlan2001&lt;/id&gt;
+              &lt;ctrl&gt;port-unreachable&lt;/ctrl&gt;
+            &lt;/If-list&gt;
+          &lt;/if-items&gt;
+        &lt;/Dom-list&gt;
+      &lt;/dom-items&gt;
+    &lt;/inst-items&gt;
+  &lt;/icmpv4-items&gt;
+  &lt;bd-items&gt;
+    &lt;bd-items&gt;
+      &lt;BD-list&gt;
+        &lt;fabEncap&gt;vlan-2001&lt;/fabEncap&gt;
+        &lt;accEncap&gt;vxlan-50000&lt;/accEncap&gt;
+      &lt;/BD-list&gt;
+    &lt;/bd-items&gt;
+  &lt;/bd-items&gt;
+  &lt;bgp-items&gt;
+    &lt;inst-items&gt;
+      &lt;asn&gt;65535&lt;/asn&gt;
+      &lt;dom-items&gt;
+        &lt;Dom-list&gt;
+          &lt;name&gt;myvrf_50000&lt;/name&gt;
+          &lt;af-items&gt;
+            &lt;DomAf-list&gt;
+              &lt;type&gt;ipv6-ucast&lt;/type&gt;
+              &lt;advertL2vpnEvpn&gt;enabled&lt;/advertL2vpnEvpn&gt;
+              &lt;maxEcmp&gt;2&lt;/maxEcmp&gt;
+              &lt;interleak-items&gt;
+                &lt;InterLeakP-list&gt;
+                  &lt;proto&gt;direct&lt;/proto&gt;
+                  &lt;inst&gt;none&lt;/inst&gt;
+                  &lt;rtMap&gt;fabric-rmap-redist-subnet&lt;/rtMap&gt;
+                &lt;/InterLeakP-list&gt;
+              &lt;/interleak-items&gt;
+            &lt;/DomAf-list&gt;
+            &lt;DomAf-list&gt;
+              &lt;type&gt;ipv4-ucast&lt;/type&gt;
+              &lt;advertL2vpnEvpn&gt;enabled&lt;/advertL2vpnEvpn&gt;
+              &lt;maxEcmp&gt;2&lt;/maxEcmp&gt;
+              &lt;interleak-items&gt;
+                &lt;InterLeakP-list&gt;
+                  &lt;proto&gt;direct&lt;/proto&gt;
+                  &lt;inst&gt;none&lt;/inst&gt;
+                  &lt;rtMap&gt;fabric-rmap-redist-subnet&lt;/rtMap&gt;
+                &lt;/InterLeakP-list&gt;
+              &lt;/interleak-items&gt;
+            &lt;/DomAf-list&gt;
+          &lt;/af-items&gt;
+        &lt;/Dom-list&gt;
+      &lt;/dom-items&gt;
+    &lt;/inst-items&gt;
+  &lt;/bgp-items&gt;
+  &lt;ipv6-items&gt;
+    &lt;inst-items&gt;
+      &lt;dom-items&gt;
+        &lt;Dom-list&gt;
+          &lt;name&gt;myvrf_50000&lt;/name&gt;
+          &lt;if-items&gt;
+            &lt;If-list&gt;
+              &lt;id&gt;vlan2001&lt;/id&gt;
+              &lt;autoconfig&gt;disabled&lt;/autoconfig&gt;
+              &lt;useLinkLocalAddr&gt;enabled&lt;/useLinkLocalAddr&gt;
+            &lt;/If-list&gt;
+          &lt;/if-items&gt;
+        &lt;/Dom-list&gt;
+      &lt;/dom-items&gt;
+    &lt;/inst-items&gt;
+  &lt;/ipv6-items&gt;
+  &lt;/System&gt;
+</content>
+  </example>
+  <command name="IMPORT">
+    <operation><![CDATA[GET]]></operation>
+    <post_template>{if $params.rd == &quot;rd:unknown:0:0&quot;}
+	{assign_object_variable var=&quot;rd&quot; value=&quot;auto&quot;}
+{/if}
+{assign_object_variable var=&quot;asn&quot; value=&quot;{$BGP_ASN}&quot;}
+{assign_object_variable var=&quot;vtep_id&quot; value=&quot;{$VTEP_ID}&quot;}</post_template>
+    <parser>
+      <section>
+        <regexp>@^\s \s*$@</regexp>
+        <xpath>//System/inst-items/Inst-list</xpath>
+        <xpath>//bgp-items/inst-items/dom-items/Dom-list/name[text()=(//inst-items/Inst-list/name[text()])]/..</xpath>
+      </section>
+      <lines>
+        <line>
+          <array/>
+          <regexp>@&lt;name&gt;(?&lt;object_id&gt;.*)&lt;/name&gt;@</regexp>
+          <xpath>//name</xpath>
+        </line>
+        <line>
+          <array/>
+          <regexp>@&lt;encap&gt;vxlan-(?&lt;vni&gt;.*)&lt;/encap&gt;@</regexp>
+          <xpath>encap</xpath>
+        </line>
+        <line>
+          <array name="bgp_af_list">
+            <lines>
+              <line>
+                <array/>
+                <regexp>@&lt;maxExtEcmp&gt;(?&lt;max_path&gt;.*)&lt;/maxExtEcmp&gt;@</regexp>
+                <xpath>//maxExtEcmp</xpath>
+              </line>
+              <line>
+                <array name="redistribution_list">
+                  <lines>
+                    <line>
+                      <array/>
+                      <regexp>@&lt;proto&gt;(?&lt;protocol&gt;.*)&lt;/proto&gt;@</regexp>
+                      <xpath>proto</xpath>
+                    </line>
+                    <line>
+                      <array/>
+                      <regexp>@&lt;rtMap&gt;(?&lt;route_map&gt;.*)&lt;/rtMap&gt;@</regexp>
+                      <xpath>rtMap</xpath>
+                    </line>
+                    <line>
+                      <array/>
+                      <regexp>@&lt;inst&gt;(?&lt;inst_id&gt;.*)&lt;/inst&gt;@</regexp>
+                      <xpath>inst</xpath>
+                    </line>
+                  </lines>
+                  <xpath>//interleak-items/InterLeakP-list</xpath>
+                </array>
+                <regexp/>
+                <xpath/>
+              </line>
+              <line>
+                <array name="network_list">
+                  <lines>
+                    <line>
+                      <array/>
+                      <regexp>@&lt;addr&gt;(?&lt;network&gt;.*)&lt;/addr&gt;@</regexp>
+                      <xpath>addr</xpath>
+                    </line>
+                  </lines>
+                  <xpath>//prefix-items/AdvPrefix-list</xpath>
+                </array>
+                <regexp/>
+                <xpath/>
+              </line>
+              <line>
+                <array/>
+                <regexp>@&lt;maxEcmp&gt;(?&lt;max_path_ibgp&gt;.*)&lt;/maxEcmp&gt;@</regexp>
+                <xpath>//maxEcmp</xpath>
+              </line>
+              <line>
+                <array/>
+                <regexp>@&lt;type&gt;(?&lt;type&gt;.*)&lt;/type&gt;@</regexp>
+                <xpath>//type</xpath>
+              </line>
+            </lines>
+            <xpath>//af-items/DomAf-list</xpath>
+          </array>
+          <regexp/>
+          <xpath/>
+        </line>
+        <line>
+          <array/>
+          <regexp>@&lt;descr&gt;(?&lt;description&gt;.*)&lt;/descr&gt;@</regexp>
+          <xpath>//descr</xpath>
+        </line>
+        <line>
+          <array/>
+          <regexp>@&lt;rd&gt;(?&lt;rd&gt;.*)&lt;/rd&gt;@</regexp>
+          <xpath>//dom-items/Dom-list/rd</xpath>
+        </line>
+      </lines>
+    </parser>
+    <xpath>/restconf/data/Cisco-NX-OS-device:System</xpath>
+  </command>
+  <command name="CREATE">
+    <operation><![CDATA[{literal}{{/literal}
+	"inst-items": {literal}{{/literal}
+		"Inst-list": {literal}[{/literal}
+			{literal}{{/literal}
+				{if isset($params.description)}
+					"descr": "{$params.description}",
+				{/if}
+				"encap": "vxlan-{$params.vni}",
+				"name": "{$params.object_id}",
+				"dom-items": {literal}{{/literal}
+					"Dom-list": {literal}{{/literal}
+						"name": "{$params.object_id}",
+						{if $params.rd == "auto"}
+							"rd": "rd:unknown:0:0",
+						{else}
+							"rd": "rd:as2-nn2:{$params.rd}",
+						{/if}
+						"af-items": {literal}{{/literal}
+							"DomAf-list": {literal}[{/literal}
+								{literal}{{/literal}
+                      "type": "ipv4-ucast",
+                      "ctrl-items": {literal}{{/literal}
+                        "AfCtrl-list": {literal}[{/literal}
+                          {literal}{{/literal}
+                            "type": "l2vpn-evpn",
+                            "rttp-items": {literal}{{/literal}
+                              "RttP-list": {literal}[{/literal}
+                                {literal}{{/literal}
+                                  "type": "export",
+                                  "ent-items": {literal}{{/literal}
+                                    "RttEntry-list": {literal}[{/literal}
+                                      {literal}{{/literal}
+                                        "rtt": "route-target:unknown:0:0"
+                                      {literal}}{/literal}
+                                    {literal}]{/literal}
+                                  {literal}}{/literal}
+                                {literal}}{/literal},
+                                {literal}{{/literal}
+                                  "type": "import",
+                                  "ent-items": {literal}{{/literal}
+                                    "RttEntry-list": {literal}[{/literal}
+                                      {literal}{{/literal}
+                                        "rtt": "route-target:unknown:0:0"
+                                      {literal}}{/literal}
+                                    {literal}]{/literal}
+                                  {literal}}{/literal}
+                                {literal}}{/literal}
+                              {literal}]{/literal}
+                            {literal}}{/literal}
+                          {literal}}{/literal},
+                          {literal}{{/literal}
+                            "type": "ipv4-ucast",
+                            "rttp-items": {literal}{{/literal}
+                              "RttP-list": {literal}[{/literal}
+                                {literal}{{/literal}
+                                  "type": "export",
+                                  "ent-items": {literal}{{/literal}
+                                    "RttEntry-list": {literal}[{/literal}
+                                      {literal}{{/literal}
+                                        "rtt": "route-target:unknown:0:0"
+                                      {literal}}{/literal}
+                                    {literal}]{/literal}
+                                  {literal}}{/literal}
+                                {literal}}{/literal},
+                                {literal}{{/literal}
+                                  "type": "import",
+                                  "ent-items": {literal}{{/literal}
+                                    "RttEntry-list": {literal}[{/literal}
+                                      {literal}{{/literal}
+                                        "rtt": "route-target:unknown:0:0"
+                                      {literal}}{/literal}
+                                    {literal}]{/literal}
+                                  {literal}}{/literal}
+                                {literal}}{/literal}
+                              {literal}]{/literal}
+                            {literal}}{/literal}
+                          {literal}}{/literal}
+                        {literal}]{/literal}
+                      {literal}}{/literal}
+                    {literal}}{/literal}
+                {literal}]{/literal}
+              {literal}}{/literal}
+            {literal}}{/literal}
+          {literal}}{/literal}
+        {literal}}{/literal}
+      {literal}]{/literal}
+	{literal}}{/literal},
+    "bgp-items": {literal}{{/literal}
+    	"inst-items": {literal}{{/literal}
+    		"asn": "{$BGP_ASN}",
+    		"dom-items": {literal}{{/literal}
+    			"Dom-list": {literal}[{/literal}
+    				{literal}{{/literal}
+    					"name": "{$params.object_id}",
+    					"rtctrl-items": {literal}{{/literal}
+    						"logNeighborChanges": "enabled"
+    					{literal}}{/literal}
+    					{if isset($params.bgp_af_list)}
+    					{literal},{/literal}
+    					"af-items": {literal}{{/literal}
+    						"DomAf-list": {literal}[{/literal}
+    							{foreach $params.bgp_af_list as $bgp_af_item}
+    								{literal}{{/literal}
+    									"type": "{$bgp_af_item.type}",
+    									"advertL2vpnEvpn": "enabled"
+    									{if isset($bgp_af_item.max_path)}
+    										,"maxExtEcmp": "{$bgp_af_item.max_path}"
+    									{/if}
+    									{if isset($bgp_af_item.max_path_ibgp)}
+    										,"maxEcmp": "{$bgp_af_item.max_path_ibgp}"
+    									{/if}
+    									{if isset($bgp_af_item.redistribution_list)}
+    									,"interleak-items": {literal}{{/literal}
+    										"InterLeakP-list": {literal}[{/literal}
+    											{foreach $bgp_af_item.redistribution_list as $redistribution_list_item}
+    												{literal}{{/literal}
+    													{if isset($redistribution_list_item.inst_id)}
+    														"inst": "{$redistribution_list_item.inst_id}",
+    													{/if}
+    													"proto": "{$redistribution_list_item.protocol}",
+    													"rtMap": "{$redistribution_list_item.route_map}"
+    												{literal}}{/literal}
+    												{if not $redistribution_list_item@last}
+    													{literal},{/literal}
+    												{/if}
+    											{/foreach}
+    										{literal}]{/literal}
+    									{literal}}{/literal}
+    									{/if}
+    									{if isset($bgp_af_item.network_list)}
+    									,"prefix-items": {literal}{{/literal}
+    										"AdvPrefix-list": {literal}[{/literal}
+    											{foreach $bgp_af_item.network_list as $network_list_item}
+    												{literal}{{/literal}
+    													"addr": "{$network_list_item.network}"
+    												{literal}}{/literal}
+    												{if not $network_list_item@last}
+    													{literal},{/literal}
+    												{/if}
+    											{/foreach}
+    										{literal}]{/literal}
+    									{literal}}{/literal}
+    									{/if}
+    								{literal}}{/literal}
+    								{if not $bgp_af_item@last}
+    									{literal},{/literal}
+    								{/if}
+    							{/foreach}
+    						{literal}]{/literal}
+    					{literal}}{/literal}
+    					{/if}
+    				{literal}}{/literal}
+    			{literal}]{/literal}
+    		{literal}}{/literal}
+    	{literal}}{/literal}
+    {literal}}{/literal}
+{literal}}{/literal}
+    ]]></operation>
+    <rest>PATCH</rest>
+    <xpath>/restconf/data/Cisco-NX-OS-device:System</xpath>
+  </command>
+  <command name="READ"/>
+  <command name="UPDATE">
+    <operation><![CDATA[{literal}{{/literal}
+	"inst-items": {literal}{{/literal}
+		"Inst-list": {literal}[{/literal}
+			{literal}{{/literal}
+				{if isset($params.description)}
+					"descr": "{$params.description}",
+				{/if}
+				"encap": "vxlan-{$params.vni}",
+				"name": "{$params.object_id}",
+				"dom-items": {literal}{{/literal}
+					"Dom-list": {literal}{{/literal}
+						"name": "{$params.object_id}",
+						{if $params.rd == "auto"}
+							"rd": "rd:unknown:0:0",
+						{else}
+							"rd": "rd:as2-nn2:{$params.rd}",
+						{/if}
+						"af-items": {literal}{{/literal}
+							"DomAf-list": {literal}[{/literal}
+								{literal}{{/literal}
+                      "type": "ipv4-ucast",
+                      "ctrl-items": {literal}{{/literal}
+                        "AfCtrl-list": {literal}[{/literal}
+                          {literal}{{/literal}
+                            "type": "l2vpn-evpn",
+                            "rttp-items": {literal}{{/literal}
+                              "RttP-list": {literal}[{/literal}
+                                {literal}{{/literal}
+                                  "type": "export",
+                                  "ent-items": {literal}{{/literal}
+                                    "RttEntry-list": {literal}[{/literal}
+                                      {literal}{{/literal}
+                                        "rtt": "route-target:unknown:0:0"
+                                      {literal}}{/literal}
+                                    {literal}]{/literal}
+                                  {literal}}{/literal}
+                                {literal}}{/literal},
+                                {literal}{{/literal}
+                                  "type": "import",
+                                  "ent-items": {literal}{{/literal}
+                                    "RttEntry-list": {literal}[{/literal}
+                                      {literal}{{/literal}
+                                        "rtt": "route-target:unknown:0:0"
+                                      {literal}}{/literal}
+                                    {literal}]{/literal}
+                                  {literal}}{/literal}
+                                {literal}}{/literal}
+                              {literal}]{/literal}
+                            {literal}}{/literal}
+                          {literal}}{/literal},
+                          {literal}{{/literal}
+                            "type": "ipv4-ucast",
+                            "rttp-items": {literal}{{/literal}
+                              "RttP-list": {literal}[{/literal}
+                                {literal}{{/literal}
+                                  "type": "export",
+                                  "ent-items": {literal}{{/literal}
+                                    "RttEntry-list": {literal}[{/literal}
+                                      {literal}{{/literal}
+                                        "rtt": "route-target:unknown:0:0"
+                                      {literal}}{/literal}
+                                    {literal}]{/literal}
+                                  {literal}}{/literal}
+                                {literal}}{/literal},
+                                {literal}{{/literal}
+                                  "type": "import",
+                                  "ent-items": {literal}{{/literal}
+                                    "RttEntry-list": {literal}[{/literal}
+                                      {literal}{{/literal}
+                                        "rtt": "route-target:unknown:0:0"
+                                      {literal}}{/literal}
+                                    {literal}]{/literal}
+                                  {literal}}{/literal}
+                                {literal}}{/literal}
+                              {literal}]{/literal}
+                            {literal}}{/literal}
+                          {literal}}{/literal}
+                        {literal}]{/literal}
+                      {literal}}{/literal}
+                    {literal}}{/literal}
+                {literal}]{/literal}
+              {literal}}{/literal}
+            {literal}}{/literal}
+          {literal}}{/literal}
+        {literal}}{/literal}
+      {literal}]{/literal}
+	{literal}}{/literal},
+    "bgp-items": {literal}{{/literal}
+    	"inst-items": {literal}{{/literal}
+    		"asn": "{$BGP_ASN}",
+    		"dom-items": {literal}{{/literal}
+    			"Dom-list": {literal}[{/literal}
+    				{literal}{{/literal}
+    					"name": "{$params.object_id}",
+    					"rtctrl-items": {literal}{{/literal}
+    						"logNeighborChanges": "enabled"
+    					{literal}}{/literal}
+    					{if isset($params.bgp_af_list)}
+    					{literal},{/literal}
+    					"af-items": {literal}{{/literal}
+    						"DomAf-list": {literal}[{/literal}
+    							{foreach $params.bgp_af_list as $bgp_af_item}
+    								{literal}{{/literal}
+    									"type": "{$bgp_af_item.type}",
+    									"advertL2vpnEvpn": "enabled"
+    									{if isset($bgp_af_item.max_path)}
+    										,"maxExtEcmp": "{$bgp_af_item.max_path}"
+    									{/if}
+    									{if isset($bgp_af_item.max_path_ibgp)}
+    										,"maxEcmp": "{$bgp_af_item.max_path_ibgp}"
+    									{/if}
+    									{if isset($bgp_af_item.redistribution_list)}
+    									,"interleak-items": {literal}{{/literal}
+    										"InterLeakP-list": {literal}[{/literal}
+    											{foreach $bgp_af_item.redistribution_list as $redistribution_list_item}
+    												{literal}{{/literal}
+    													{if isset($redistribution_list_item.inst_id)}
+    														"inst": "{$redistribution_list_item.inst_id}",
+    													{/if}
+    													"proto": "{$redistribution_list_item.protocol}",
+    													"rtMap": "{$redistribution_list_item.route_map}"
+    												{literal}}{/literal}
+    												{if not $redistribution_list_item@last}
+    													{literal},{/literal}
+    												{/if}
+    											{/foreach}
+    										{literal}]{/literal}
+    									{literal}}{/literal}
+    									{/if}
+    									{if isset($bgp_af_item.network_list)}
+    									,"prefix-items": {literal}{{/literal}
+    										"AdvPrefix-list": {literal}[{/literal}
+    											{foreach $bgp_af_item.network_list as $network_list_item}
+    												{literal}{{/literal}
+    													"addr": "{$network_list_item.network}"
+    												{literal}}{/literal}
+    												{if not $network_list_item@last}
+    													{literal},{/literal}
+    												{/if}
+    											{/foreach}
+    										{literal}]{/literal}
+    									{literal}}{/literal}
+    									{/if}
+    								{literal}}{/literal}
+    								{if not $bgp_af_item@last}
+    									{literal},{/literal}
+    								{/if}
+    							{/foreach}
+    						{literal}]{/literal}
+    					{literal}}{/literal}
+    					{/if}
+    				{literal}}{/literal}
+    			{literal}]{/literal}
+    		{literal}}{/literal}
+    	{literal}}{/literal}
+    {literal}}{/literal}
+{literal}}{/literal}
+    ]]></operation>
+    <rest>PATCH</rest>
+    <xpath>/restconf/data/Cisco-NX-OS-device:System</xpath>
+  </command>
+  <command name="CONSTRAINT">
+    <operation><![CDATA[{foreach $params.bgp_af_list as $bgp_af_list_item}
+{foreach $bgp_af_list_item.network_list as $network_list_item}
+{if not preg_match("/^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.)(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.)(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.)([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))$/", $params.bgp_af_list.{$bgp_af_list_item@index}.network_list.{$network_list_item@index}.network)}
+Invalid IP-Address entered. Valid syntax is IP-Address with subnet e.g. xxx.xxx.xxx.xxx/xx
+{/if}
+{/foreach}
+{/foreach}
+{if isset($params.bgp_af_list.{$bgp_af_list_item@index}.max_path_ibgp) && $params.bgp_af_list.{$bgp_af_list_item@index}.max_path_ibgp != "" && ($params.bgp_af_list.{$bgp_af_list_item@index}.max_path_ibgp > 64 || $params.bgp_af_list.{$bgp_af_list_item@index}.max_path_ibgp < 1)}
+Invalid max_path_ibgp value {$params.bgp_af_list.{$bgp_af_list_item@index}.max_path_ibgp} entered. Valid range: 1-64
+{/if}]]></operation>
+  </command>
+  <command name="DELETE">
+    <rest>DELETE##DELETE</rest>
+    <xpath>/restconf/data/Cisco-NX-OS-device:System/inst-items/Inst-list={$params.object_id}##/restconf/data/Cisco-NX-OS-device:System/bgp-items/inst-items/dom-items/Dom-list={$params.object_id}</xpath>
+  </command>
+  <command name="LIST"/>
+</ObjectDefinition>

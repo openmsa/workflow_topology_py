@@ -1,0 +1,696 @@
+<ObjectDefinition>
+  <information>
+    <icon>none</icon>
+    <description></description>
+    <displayField>object_id</displayField>
+    <serviceTaskType/>
+    <order>0</order>
+    <visibility>5</visibility>
+    <configType>xml</configType>
+    <createTemplateId/>
+    <createTemplateObject/>
+    <defaultDisplay>false</defaultDisplay>
+    <dynamic>false</dynamic>
+    <importIfMandatoryPresent>false</importIfMandatoryPresent>
+    <maxInstances>0</maxInstances>
+    <relatedObjects/>
+    <name>General_Vlan_Interfaces</name>
+    <group>Default</group>
+    <importonce>false</importonce>
+    <importrank>0</importrank>
+    <reorderinstances>false</reorderinstances>
+    <sortascending>false</sortascending>
+    <sortauto>false</sortauto>
+    <sortnumerical>false</sortnumerical>
+    <sortvariable>params._order</sortvariable>
+  </information>
+  <variables frozen="0">
+    <variable displayName="vlan_id" name="params.object_id" startIncrement="0" type="Integer" mandatoryArray="false" visible="true" description="" groupSeparator="" groupDisplayName="" maxLength="100" displayOrder="0" increment="0" refServiceURI="" keepOnImport="false" editable="false" onlyDetailView="false" localVarNameMatch="" remoteVarNameMatch="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" displayNameHeader="" fullDisplayName="" isCompositeKey="false" isMandatory="true" isUserLocked="false" isGrouped="false" isSearchable="false" isUniqueGlobal="false"/>
+    <variable displayName="name" name="params.name" startIncrement="0" type="String" mandatoryArray="false" visible="true" description="" groupSeparator="" groupDisplayName="" maxLength="100" displayOrder="0" increment="0" refServiceURI="" keepOnImport="false" editable="false" onlyDetailView="false" localVarNameMatch="" remoteVarNameMatch="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" displayNameHeader="" fullDisplayName="" isCompositeKey="false" isMandatory="false" isUserLocked="true" isGrouped="false" isSearchable="false" isUniqueGlobal="false"/>
+    <variable displayName="vrf" name="params.vrf" startIncrement="0" type="ObjectRef" mandatoryArray="false" visible="true" description="" groupSeparator="" groupDisplayName="" maxLength="100" displayOrder="0" increment="0" refServiceURI="" keepOnImport="false" editable="false" onlyDetailView="false" localVarNameMatch="" remoteVarNameMatch="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" displayNameHeader="" fullDisplayName="" isCompositeKey="false" default="default" isMandatory="true" isUserLocked="false" isGrouped="false" isSearchable="false" isUniqueGlobal="false">
+      <classes>
+        <class>Overlay_L3_Tenants</class>
+      </classes>
+    </variable>
+    <variable displayName="admin_state" name="params.admin_state" startIncrement="0" type="String" mandatoryArray="false" visible="true" description="" groupSeparator="" groupDisplayName="" maxLength="100" displayOrder="0" increment="0" refServiceURI="" keepOnImport="false" editable="false" onlyDetailView="false" localVarNameMatch="" remoteVarNameMatch="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" displayNameHeader="" fullDisplayName="" isCompositeKey="false" default="up" isMandatory="false" isUserLocked="false" isGrouped="false" isSearchable="false" isUniqueGlobal="false">
+      <values>
+        <values displayValue="up">up</values>
+        <values displayValue="down">down</values>
+      </values>
+    </variable>
+    <variable displayName="oper_state" name="params.oper_state" startIncrement="0" type="String" mandatoryArray="false" visible="true" description="" groupSeparator="" groupDisplayName="" maxLength="100" displayOrder="0" increment="0" refServiceURI="" keepOnImport="false" editable="false" onlyDetailView="false" localVarNameMatch="" remoteVarNameMatch="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" displayNameHeader="" fullDisplayName="" isCompositeKey="false" isMandatory="false" isUserLocked="true" isGrouped="false" isSearchable="false" isUniqueGlobal="false"/>
+    <variable displayName="ip_address" name="params.ip_list.0.ip_address" startIncrement="0" type="String" mandatoryArray="false" visible="true" description="" groupSeparator="" groupDisplayName="" maxLength="100" displayOrder="0" increment="0" refServiceURI="" keepOnImport="false" editable="false" onlyDetailView="false" localVarNameMatch="" remoteVarNameMatch="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" displayNameHeader="" fullDisplayName="" isCompositeKey="false" isMandatory="false" isUserLocked="false" isGrouped="false" isSearchable="false" isUniqueGlobal="false"/>
+    <variable displayName="type" name="params.ip_list.0.type" startIncrement="0" type="String" mandatoryArray="false" visible="true" description="" groupSeparator="" groupDisplayName="" maxLength="100" displayOrder="0" increment="0" refServiceURI="" keepOnImport="false" editable="false" onlyDetailView="false" localVarNameMatch="" remoteVarNameMatch="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" displayNameHeader="" fullDisplayName="" isCompositeKey="false" default="primary" isMandatory="false" isUserLocked="false" isGrouped="false" isSearchable="false" isUniqueGlobal="false">
+      <values>
+        <values displayValue="primary">primary</values>
+        <values displayValue="secondary">secondary</values>
+      </values>
+    </variable>
+    <variable displayName="routing_tag" name="params.ip_list.0.routing_tag" startIncrement="0" type="Integer" mandatoryArray="false" visible="true" description="" groupSeparator="" groupDisplayName="" maxLength="100" displayOrder="0" increment="0" refServiceURI="" keepOnImport="false" editable="false" onlyDetailView="false" localVarNameMatch="" remoteVarNameMatch="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" displayNameHeader="" fullDisplayName="" isCompositeKey="false" isMandatory="false" isUserLocked="false" isGrouped="false" isSearchable="false" isUniqueGlobal="false"/>
+    <variable displayName="MTU" name="params.mtu" startIncrement="0" type="Integer" mandatoryArray="false" visible="true" description="" groupSeparator="" groupDisplayName="" maxLength="100" displayOrder="0" increment="0" refServiceURI="" keepOnImport="false" editable="false" onlyDetailView="false" localVarNameMatch="" remoteVarNameMatch="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" displayNameHeader="" fullDisplayName="" isCompositeKey="false" default="9216" isMandatory="false" isUserLocked="false" isGrouped="false" isSearchable="false" isUniqueGlobal="false"/>
+    <variable displayName="enable_multicast" name="params.enable_multicast" startIncrement="0" type="Boolean" mandatoryArray="false" visible="true" description="" groupSeparator="" groupDisplayName="" maxLength="100" displayOrder="10" increment="0" refServiceURI="" keepOnImport="false" editable="false" onlyDetailView="false" localVarNameMatch="" remoteVarNameMatch="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" displayNameHeader="" fullDisplayName="" isCompositeKey="false" default="false" isMandatory="false" isUserLocked="false" isGrouped="false" isSearchable="false" isUniqueGlobal="false"/>
+    <variable displayName="ip_address" name="params.dhcp_relay_servers.0.ip_address" startIncrement="0" type="IpAddress" mandatoryArray="false" visible="true" description="" groupSeparator="" groupDisplayName="" maxLength="130" displayOrder="0" increment="0" refServiceURI="" keepOnImport="false" editable="false" onlyDetailView="false" localVarNameMatch="" remoteVarNameMatch="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" displayNameHeader="" fullDisplayName="" isCompositeKey="false" isMandatory="false" isUserLocked="false" isGrouped="false" isSearchable="false" isUniqueGlobal="false">
+      <sections>
+        <sections>dhcp_relay_servers</sections>
+      </sections>
+    </variable>
+    <variable displayName="server_vrf" name="params.dhcp_relay_servers.0.server_vrf" startIncrement="0" type="ObjectRef" mandatoryArray="false" visible="true" description="" groupSeparator="" groupDisplayName="" maxLength="100" displayOrder="0" increment="0" refServiceURI="" keepOnImport="false" editable="false" onlyDetailView="false" localVarNameMatch="" remoteVarNameMatch="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" displayNameHeader="" fullDisplayName="" isCompositeKey="false" default="" isMandatory="false" isUserLocked="false" isGrouped="false" isSearchable="false" isUniqueGlobal="false">
+      <sections>
+        <sections>dhcp_relay_servers</sections>
+      </sections>
+      <classes>
+        <class>Overlay_L3_Tenants</class>
+      </classes>
+    </variable>
+    <variable displayName="enable_ip_forward" name="params.enable_ip_forward" startIncrement="0" type="Boolean" mandatoryArray="false" visible="true" description="" groupSeparator="" groupDisplayName="" maxLength="100" displayOrder="0" increment="0" refServiceURI="" keepOnImport="false" editable="false" onlyDetailView="false" localVarNameMatch="" remoteVarNameMatch="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" displayNameHeader="" fullDisplayName="" isCompositeKey="false" default="false" isMandatory="false" isUserLocked="false" isGrouped="false" isSearchable="false" isUniqueGlobal="false"/>
+    <variable displayName="enable_anycast_gateway" name="params.enable_anycast_gateway" startIncrement="0" type="Boolean" mandatoryArray="false" visible="true" description="" groupSeparator="" groupDisplayName="" maxLength="100" displayOrder="0" increment="0" refServiceURI="" keepOnImport="false" editable="false" onlyDetailView="false" localVarNameMatch="" remoteVarNameMatch="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" displayNameHeader="" fullDisplayName="" isCompositeKey="false" default="false" isMandatory="false" isUserLocked="false" isGrouped="false" isSearchable="false" isUniqueGlobal="false"/>
+    <variable displayName="description" name="params.description" startIncrement="0" type="String" mandatoryArray="false" visible="true" description="" groupSeparator="" groupDisplayName="" maxLength="100" displayOrder="0" increment="0" refServiceURI="" keepOnImport="false" editable="false" onlyDetailView="false" localVarNameMatch="" remoteVarNameMatch="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" displayNameHeader="" fullDisplayName="" isCompositeKey="false" isMandatory="false" isUserLocked="false" isGrouped="false" isSearchable="false" isUniqueGlobal="false"/>
+  </variables>
+  <example>
+    <content>  &lt;System&gt;
+  &lt;ipv4-items&gt;
+    &lt;inst-items&gt;
+      &lt;dom-items&gt;
+        &lt;Dom-list&gt;
+          &lt;name&gt;Public_Common&lt;/name&gt;
+          &lt;if-items&gt;
+            &lt;If-list&gt;
+              &lt;id&gt;vlan200&lt;/id&gt;
+              &lt;adminSt&gt;enabled&lt;/adminSt&gt;
+              &lt;addr-items&gt;
+                &lt;Addr-list&gt;
+                  &lt;addr&gt;100.71.250.29/29&lt;/addr&gt;
+                  &lt;tag&gt;101&lt;/tag&gt;
+                &lt;/Addr-list&gt;
+                &lt;Addr-list&gt;
+                  &lt;addr&gt;100.71.250.30/29&lt;/addr&gt;
+                  &lt;tag&gt;101&lt;/tag&gt;
+                  &lt;type&gt;secondary&lt;/type&gt;
+                &lt;/Addr-list&gt;
+              &lt;/addr-items&gt;
+            &lt;/If-list&gt;
+          &lt;/if-items&gt;
+        &lt;/Dom-list&gt;
+      &lt;/dom-items&gt;
+    &lt;/inst-items&gt;
+  &lt;/ipv4-items&gt;
+  &lt;nd-items&gt;
+    &lt;inst-items&gt;
+      &lt;dom-items&gt;
+        &lt;Dom-list&gt;
+          &lt;name&gt;Public_Common&lt;/name&gt;
+          &lt;if-items&gt;
+            &lt;If-list&gt;
+              &lt;id&gt;vlan200&lt;/id&gt;
+              &lt;ctrl&gt;&lt;/ctrl&gt;
+            &lt;/If-list&gt;
+          &lt;/if-items&gt;
+        &lt;/Dom-list&gt;
+      &lt;/dom-items&gt;
+    &lt;/inst-items&gt;
+  &lt;/nd-items&gt;
+  &lt;intf-items&gt;
+    &lt;svi-items&gt;
+      &lt;If-list&gt;
+        &lt;id&gt;vlan200&lt;/id&gt;
+        &lt;adminSt&gt;up&lt;/adminSt&gt;
+        &lt;descr&gt;[Gateway for VNI200200]&lt;/descr&gt;
+        &lt;mtu&gt;1500&lt;/mtu&gt;
+        &lt;rtvrfMbr-items&gt;
+          &lt;tDn&gt;/System/inst-items/Inst-list[name=&apos;Public_Common&apos;]&lt;/tDn&gt;
+        &lt;/rtvrfMbr-items&gt;
+      &lt;/If-list&gt;
+    &lt;/svi-items&gt;
+  &lt;/intf-items&gt;
+  &lt;icmpv4-items&gt;
+    &lt;inst-items&gt;
+      &lt;dom-items&gt;
+        &lt;Dom-list&gt;
+          &lt;name&gt;Public_Common&lt;/name&gt;
+          &lt;if-items&gt;
+            &lt;If-list&gt;
+              &lt;id&gt;vlan200&lt;/id&gt;
+              &lt;ctrl&gt;port-unreachable&lt;/ctrl&gt;
+            &lt;/If-list&gt;
+          &lt;/if-items&gt;
+        &lt;/Dom-list&gt;
+      &lt;/dom-items&gt;
+    &lt;/inst-items&gt;
+  &lt;/icmpv4-items&gt;
+  -------------------------------------------------
+ 
+   &lt;dhcp-items&gt;
+    &lt;inst-items&gt;
+      &lt;relayif-items&gt;
+        &lt;RelayIf-list&gt;
+          &lt;id&gt;vlan100&lt;/id&gt;
+          &lt;addr-items&gt;
+            &lt;RelayAddr-list&gt;
+              &lt;vrf&gt;default&lt;/vrf&gt;
+              &lt;address&gt;1.1.1.1&lt;/address&gt;
+              &lt;counter&gt;2&lt;/counter&gt;
+            &lt;/RelayAddr-list&gt;
+          &lt;/addr-items&gt;
+        &lt;/RelayIf-list&gt;
+      &lt;/relayif-items&gt;
+    &lt;/inst-items&gt;
+  &lt;/dhcp-items&gt;
+  &lt;intf-items&gt;
+    &lt;svi-items&gt;
+      &lt;If-list&gt;
+        &lt;id&gt;vlan200&lt;/id&gt;
+      &lt;/If-list&gt;
+    &lt;/svi-items&gt;
+  &lt;/intf-items&gt;
+  -----------------------------------
+
+    &lt;hmm-items&gt;
+    &lt;fwdinst-items&gt;
+      &lt;if-items&gt;
+        &lt;FwdIf-list&gt;
+          &lt;id&gt;vlan100&lt;/id&gt;
+          &lt;mode&gt;anycastGW&lt;/mode&gt;
+        &lt;/FwdIf-list&gt;
+      &lt;/if-items&gt;
+    &lt;/fwdinst-items&gt;
+  &lt;/hmm-items&gt;
+  &lt;nd-items&gt;
+    &lt;inst-items&gt;
+      &lt;dom-items&gt;
+        &lt;Dom-list&gt;
+          &lt;name&gt;default&lt;/name&gt;
+          &lt;if-items&gt;
+            &lt;If-list&gt;
+              &lt;id&gt;vlan100&lt;/id&gt;
+              &lt;ctrl&gt;&lt;/ctrl&gt;
+            &lt;/If-list&gt;
+          &lt;/if-items&gt;
+        &lt;/Dom-list&gt;
+      &lt;/dom-items&gt;
+    &lt;/inst-items&gt;
+  &lt;/nd-items&gt;
+  &lt;intf-items&gt;
+    &lt;svi-items&gt;
+      &lt;If-list&gt;
+        &lt;id&gt;vlan100&lt;/id&gt;
+        &lt;adminSt&gt;up&lt;/adminSt&gt;
+        &lt;descr&gt;[Gateway for VNI100100]&lt;/descr&gt;
+        &lt;mtu&gt;9216&lt;/mtu&gt;
+      &lt;/If-list&gt;
+    &lt;/svi-items&gt;
+  &lt;/intf-items&gt;
+  &lt;icmpv4-items&gt;
+    &lt;inst-items&gt;
+      &lt;dom-items&gt;
+        &lt;Dom-list&gt;
+          &lt;name&gt;default&lt;/name&gt;
+          &lt;if-items&gt;
+            &lt;If-list&gt;
+              &lt;id&gt;vlan100&lt;/id&gt;
+              &lt;ctrl&gt;port-unreachable&lt;/ctrl&gt;
+            &lt;/If-list&gt;
+          &lt;/if-items&gt;
+        &lt;/Dom-list&gt;
+      &lt;/dom-items&gt;
+    &lt;/inst-items&gt;
+  &lt;/icmpv4-items&gt;
+  -------------------------------------------
+ &lt;hmm-items&gt;
+&#160; &#160; &lt;fwdinst-items&gt;
+&#160; &#160; &#160; &lt;if-items&gt;
+&#160; &#160; &#160; &#160; &lt;FwdIf-list&gt;
+&#160; &#160; &#160; &#160; &#160; &lt;id&gt;vlan600&lt;/id&gt;
+&#160; &#160; &#160; &#160; &#160; &lt;mode&gt;anycastGW&lt;/mode&gt;
+&#160; &#160; &#160; &#160; &lt;/FwdIf-list&gt;
+&#160; &#160; &#160; &lt;/if-items&gt;
+&#160; &#160; &lt;/fwdinst-items&gt;
+&#160; &lt;/hmm-items&gt;
+&#160; &lt;ipv4-items&gt;
+&#160; &#160; &lt;inst-items&gt;
+&#160; &#160; &#160; &lt;dom-items&gt;
+&#160; &#160; &#160; &#160; &lt;Dom-list&gt;
+&#160; &#160; &#160; &#160; &#160; &lt;name&gt;default&lt;/name&gt;
+&#160; &#160; &#160; &#160; &#160; &lt;if-items&gt;
+&#160; &#160; &#160; &#160; &#160; &#160; &lt;If-list&gt;
+&#160; &#160; &#160; &#160; &#160; &#160; &#160; &lt;id&gt;vlan600&lt;/id&gt;
+&#160; &#160; &#160; &#160; &#160; &#160; &#160; &lt;forward&gt;enabled&lt;/forward&gt;
+&#160; &#160; &#160; &#160; &#160; &#160; &lt;/If-list&gt;
+&#160; &#160; &#160; &#160; &#160; &lt;/if-items&gt;
+&#160; &#160; &#160; &#160; &lt;/Dom-list&gt;
+&#160; &#160; &#160; &lt;/dom-items&gt;
+&#160; &#160; &lt;/inst-items&gt;
+&#160; &lt;/ipv4-items&gt;
+&#160; &lt;intf-items&gt;
+&#160; &#160; &lt;svi-items&gt;
+&#160; &#160; &#160; &lt;If-list&gt;
+&#160; &#160; &#160; &#160; &lt;id&gt;vlan600&lt;/id&gt;
+&#160; &#160; &#160; &lt;/If-list&gt;
+&#160; &#160; &lt;/svi-items&gt;
+&#160; &lt;/intf-items&gt;
+  
+  &lt;/System&gt;</content>
+  </example>
+  <command name="IMPORT">
+    <operation><![CDATA[GET]]></operation>
+    <post_template>{assign_object_variable var=&quot;name&quot; value=&quot;vlan{$params.object_id}&quot;}
+{assign_object_variable var=&quot;_order&quot; value={$params.object_id}}
+{if $params.enable_multicast != &quot;true&quot;}
+	{assign_object_variable var=&quot;enable_multicast&quot; value=&quot;false&quot;}
+{/if}
+{if $params.enable_anycast_gateway == &quot;anycastGW&quot;}
+	{assign_object_variable var=&quot;enable_anycast_gateway&quot; value=true}
+{else}
+	{assign_object_variable var=&quot;enable_anycast_gateway&quot; value=false}
+{/if}
+{if $params.enable_ip_forward == &quot;enabled&quot;}
+	{assign_object_variable var=&quot;enable_ip_forward&quot; value=true}
+{else}
+	{assign_object_variable var=&quot;enable_ip_forward&quot; value=false}
+{/if}</post_template>
+    <parser>
+      <section>
+        <regexp>@^\s \s*$@</regexp>
+        <xpath>//intf-items/svi-items/If-list</xpath>
+        <xpath>//pim-items/inst-items/dom-items/Dom-list/name[string-length(//intf-items/svi-items/If-list/rtvrfMbr-items/tDn[text()]) &gt; 0 and (//intf-items/svi-items/If-list/rtvrfMbr-items/tDn[text()]) = concat(&quot;/System/inst-items/Inst-list[mode=&apos;&quot;,text(), &quot;&apos;]&quot;) or (//intf-items/svi-items/If-list/rtvrfMbr-items/tDn[text()]) = concat(&quot;/System/inst-items/Inst-list[name=&apos;&quot;,text(), &quot;&apos;]&quot;)]/../if-items/If-list/id[text()=(//intf-items/svi-items/If-list/id[text()])]/..</xpath>
+        <xpath>//hmm-items/fwdinst-items/if-items/FwdIf-list/id[text()=(//intf-items/svi-items/If-list/id[text()])]/..</xpath>
+        <xpath>//dhcp-items/inst-items/relayif-items/RelayIf-list/id[text()=(//intf-items/svi-items/If-list/id[text()])]/..</xpath>
+        <xpath>//ipv4-items/inst-items/dom-items/Dom-list/if-items/If-list/id[text()=(//intf-items/svi-items/If-list/id[text()])]/..</xpath>
+      </section>
+      <lines>
+        <line>
+          <array/>
+          <regexp>@&lt;adminSt&gt;(?&lt;admin_state&gt;.*)&lt;/adminSt&gt;@</regexp>
+          <xpath>//svi-items/adminSt</xpath>
+        </line>
+        <line>
+          <array/>
+          <regexp>@&lt;descr&gt;(?&lt;description&gt;.*)&lt;/descr&gt;@</regexp>
+          <xpath>//descr</xpath>
+        </line>
+        <line>
+          <array/>
+          <regexp>@&lt;mtu&gt;(?&lt;mtu&gt;.*)&lt;/mtu&gt;@</regexp>
+          <xpath>//mtu</xpath>
+        </line>
+        <line>
+          <array/>
+          <regexp>@.*(mode|name)=&apos;(?&lt;vrf&gt;[^&apos;]+)&apos;]&lt;\/tDn&gt;@</regexp>
+          <xpath>//rtvrfMbr-items</xpath>
+        </line>
+        <line>
+          <array/>
+          <regexp>@&lt;id&gt;vlan(?&lt;object_id&gt;.*)&lt;/id&gt;@</regexp>
+          <xpath>//id</xpath>
+        </line>
+        <line>
+          <array name="ip_list">
+            <lines>
+              <line>
+                <array/>
+                <regexp>@&lt;addr&gt;(?&lt;ip_address&gt;.*)&lt;/addr&gt;@</regexp>
+                <xpath>//addr</xpath>
+              </line>
+              <line>
+                <array/>
+                <regexp>@&lt;tag&gt;(?&lt;routing_tag&gt;.*)&lt;/tag&gt;@</regexp>
+                <xpath>//tag</xpath>
+              </line>
+              <line>
+                <array/>
+                <regexp>@&lt;type&gt;(?&lt;type&gt;.*)&lt;/type&gt;@</regexp>
+                <xpath>//type</xpath>
+              </line>
+            </lines>
+            <xpath>//addr-items/Addr-list</xpath>
+          </array>
+          <regexp/>
+          <xpath/>
+        </line>
+        <line>
+          <array/>
+          <regexp>@&lt;operSt&gt;(?&lt;oper_state&gt;.*)&lt;/operSt&gt;@</regexp>
+          <xpath>//operSt</xpath>
+        </line>
+        <line>
+          <array/>
+          <regexp>@&lt;pimSparseMode&gt;(?&lt;enable_multicast&gt;.*)&lt;/pimSparseMode&gt;@</regexp>
+          <xpath>//pimSparseMode</xpath>
+        </line>
+        <line>
+          <array name="dhcp_relay_servers">
+            <lines>
+              <line>
+                <array/>
+                <regexp>@&lt;vrf&gt;(?&lt;server_vrf&gt;.*)&lt;/vrf&gt;@</regexp>
+                <xpath>//vrf</xpath>
+              </line>
+              <line>
+                <array/>
+                <regexp>@&lt;address&gt;(?&lt;ip_address&gt;.*)&lt;/address&gt;@</regexp>
+                <xpath>//address</xpath>
+              </line>
+            </lines>
+            <xpath>addr-items/RelayAddr-list</xpath>
+          </array>
+          <regexp/>
+          <xpath/>
+        </line>
+        <line>
+          <array/>
+          <regexp>@&lt;mode&gt;(?&lt;enable_anycast_gateway&gt;.*)&lt;/mode&gt;@</regexp>
+          <xpath>//mode</xpath>
+        </line>
+        <line>
+          <array/>
+          <regexp>@&lt;forward&gt;(?&lt;enable_ip_forward&gt;.*)&lt;/forward&gt;@</regexp>
+          <xpath>//forward</xpath>
+        </line>
+      </lines>
+    </parser>
+    <xpath>/restconf/data/Cisco-NX-OS-device:System</xpath>
+  </command>
+  <command name="CREATE">
+    <operation><![CDATA[{literal}{{/literal}
+	{if isset($params.ip_list) || $params.enable_ip_forward == true}
+	  "ipv4-items": {literal}{{/literal}
+	    "inst-items": {literal}{{/literal}
+	      "dom-items": {literal}{{/literal}
+	        "Dom-list": {literal}{{/literal}
+	          "name": "{$params.vrf}",
+	          "if-items": {literal}{{/literal}
+	            "If-list": {literal}{{/literal}
+	              "id": "vlan{$params.object_id}",
+	              {if $params.enable_ip_forward == true}
+	                "forward": "enabled"
+	              {else if isset($params.ip_list)}
+	              "addr-items": {literal}{{/literal}
+	                "Addr-list": {literal}[{/literal}
+	                	{foreach $params.ip_list as $ip_list_item}
+	                		{literal}{{/literal}
+	                    		{if isset($ip_list_item.routing_tag)}
+		                 		"addr": "{$ip_list_item.ip_address}",
+	                    		"tag": "{$ip_list_item.routing_tag}"
+	                    		  {if isset($ip_list_item.type)}
+	                    		    ,"type":"{$ip_list_item.type}"
+	                    		  {/if}
+	                    		{else}
+	                    		"addr": "{$ip_list_item.ip_address}"
+	                    		  {if isset($ip_list_item.type)}
+	                    		    ,"type":"{$ip_list_item.type}"
+	                    		  {/if}
+	                    		{/if}
+	            			{literal}}{/literal}
+	                		{if not $ip_list_item@last}
+	                			{literal},{/literal}
+	                		{/if}
+	                	{/foreach}
+	                {literal}]{/literal}
+	              {literal}}{/literal}
+	             {/if}
+	             {literal}}{/literal}
+	           {literal}}{/literal}
+	         {literal}}{/literal}
+	       {literal}}{/literal}
+	     {literal}}{/literal}
+	   {literal}}{/literal},
+	{/if}
+   	{if isset($params.dhcp_relay_servers)}
+		"dhcp-items": {literal}{{/literal}
+			"inst-items": {literal}{{/literal}
+				"relayif-items": {literal}{{/literal}
+					"RelayIf-list": {literal}{{/literal}
+						"id": "vlan{$params.object_id}",
+						"addr-items": {literal}{{/literal}
+							"RelayAddr-list": {literal}[{/literal}
+								{foreach $params.dhcp_relay_servers as $dhcp_relay_servers_item}
+									{literal}{{/literal}
+										"address": "{$dhcp_relay_servers_item.ip_address}"
+										{if $dhcp_relay_servers_item.server_vrf != ""}
+											,"vrf": "{$dhcp_relay_servers_item.server_vrf}"
+										{else}
+											,"vrf": "!unspecified"
+										{/if}
+									{literal}}{/literal}
+									{if not $dhcp_relay_servers_item@last}
+										{literal},{/literal}
+									{/if}
+								{/foreach}
+							{literal}]{/literal}
+						{literal}}{/literal}
+					{literal}}{/literal}
+				{literal}}{/literal}
+			{literal}}{/literal}
+		{literal}}{/literal},
+	{/if}
+  "intf-items": {literal}{{/literal}
+    "svi-items": {literal}{{/literal}
+      "If-list": {literal}{{/literal}
+        "id": "vlan{$params.object_id}",
+        "adminSt": "{$params.admin_state}",
+        "descr": "{$params.description}",
+        "rtvrfMbr-items": {literal}{{/literal}
+        	{if {$FIRMWARE} == "9.3(3)"}
+				"tDn": "/System/inst-items/Inst-list[mode='\''{$params.vrf}'\'']"
+			{else if {$FIRMWARE} == "9.3(5)" || {$FIRMWARE} == "9.3(9)" || {$FIRMWARE} == "9.3(10)" || {$FIRMWARE} == "10.2(4)"}
+				"tDn": "/System/inst-items/Inst-list[name='\''{$params.vrf}'\'']"
+			{else}
+				"tDn": "/System/inst-items/Inst-list[name='\''{$params.vrf}'\'']"
+			{/if}
+        {literal}}{/literal}
+        {if isset($params.mtu) && $params.mtu != ""}
+			,"mtu": "{$params.mtu}"
+		{/if}
+        {literal}}{/literal}
+     {literal}}{/literal}
+   {literal}}{/literal}
+   {if $params.enable_multicast == 1}
+   ,"pim-items": {literal}{{/literal}
+     "inst-items": {literal}{{/literal}
+      "dom-items": {literal}{{/literal}
+        "Dom-list": {literal}{{/literal}
+	        {if isset($params.vrf)}
+	        	"name": "{$params.vrf}",
+	        {else}
+	        	"name": "default",
+	        {/if}
+          "if-items": {literal}{{/literal}
+            "If-list": {literal}{{/literal}
+              "id": "vlan{$params.object_id}",
+              "pimSparseMode": "true"
+            {literal}}{/literal}
+          {literal}}{/literal}
+        {literal}}{/literal}
+      {literal}}{/literal}
+    {literal}}{/literal}
+  {literal}}{/literal}
+  {/if}
+  {if $params.enable_anycast_gateway == true}
+  ,
+  "hmm-items": {literal}{{/literal}
+		"fwdinst-items": {literal}{{/literal}
+			"if-items": {literal}{{/literal}
+				"FwdIf-list": {literal}{{/literal}
+					"id": "vlan{$params.object_id}",
+					 "mode": "anycastGW"
+            		  {literal}}{/literal}
+			{literal}}{/literal}
+		{literal}}{/literal}
+	{literal}}{/literal}
+	{/if}
+ {literal}}{/literal}]]></operation>
+    <rest>PATCH</rest>
+    <xpath>/restconf/data/Cisco-NX-OS-device:System</xpath>
+  </command>
+  <command name="READ"/>
+  <command name="UPDATE">
+    <operation><![CDATA[{literal}{{/literal}
+	{if isset($params.ip_list) || $params.enable_ip_forward == true || ($params.enable_ip_forward == false && $General_Vlan_Interfaces.{$params.object_id}.enable_ip_forward == true)}
+	  "ipv4-items": {literal}{{/literal}
+	    "inst-items": {literal}{{/literal}
+	      "dom-items": {literal}{{/literal}
+	        "Dom-list": {literal}{{/literal}
+	          "name": "{$params.vrf}",
+	          "if-items": {literal}{{/literal}
+	            "If-list": {literal}{{/literal}
+	              "id": "vlan{$params.object_id}",
+	              {if $params.enable_ip_forward == true}
+	                "forward": "enabled"
+	              {else if isset($params.ip_list)}
+	              "forward": "disabled",
+	              "addr-items": {literal}{{/literal}
+	                "Addr-list": {literal}[{/literal}
+	                	{foreach $params.ip_list as $ip_list_item}
+	                		{literal}{{/literal}
+	                    		{if isset($ip_list_item.routing_tag)}
+		                 		"addr": "{$ip_list_item.ip_address}",
+	                    		"tag": "{$ip_list_item.routing_tag}"
+	                    		  {if isset($ip_list_item.type)}
+	                    		    ,"type":"{$ip_list_item.type}"
+	                    		  {/if}
+	                    		{else}
+	                    		"addr": "{$ip_list_item.ip_address}"
+	                    		  {if isset($ip_list_item.type)}
+	                    		    ,"type":"{$ip_list_item.type}"
+	                    		  {/if}
+	                    		{/if}
+	            			{literal}}{/literal}
+	                		{if not $ip_list_item@last}
+	                			{literal},{/literal}
+	                		{/if}
+	                	{/foreach}
+	                {literal}]{/literal}
+	              {literal}}{/literal}
+	              {else if $params.enable_ip_forward == false}
+	            		"forward": "disabled"
+	             {/if}
+	             {literal}}{/literal}
+	           {literal}}{/literal}
+	         {literal}}{/literal}
+	       {literal}}{/literal}
+	     {literal}}{/literal}
+	   {literal}}{/literal},
+	{/if}
+   	{if isset($params.dhcp_relay_servers)}
+		"dhcp-items": {literal}{{/literal}
+			"inst-items": {literal}{{/literal}
+				"relayif-items": {literal}{{/literal}
+					"RelayIf-list": {literal}{{/literal}
+						"id": "vlan{$params.object_id}",
+						"addr-items": {literal}{{/literal}
+							"RelayAddr-list": {literal}[{/literal}
+								{foreach $params.dhcp_relay_servers as $dhcp_relay_servers_item}
+									{literal}{{/literal}
+										"address": "{$dhcp_relay_servers_item.ip_address}"
+										{if $dhcp_relay_servers_item.server_vrf != ""}
+											,"vrf": "{$dhcp_relay_servers_item.server_vrf}"
+										{else}
+											,"vrf": "!unspecified"
+										{/if}
+									{literal}}{/literal}
+									{if not $dhcp_relay_servers_item@last}
+										{literal},{/literal}
+									{/if}
+								{/foreach}
+							{literal}]{/literal}
+						{literal}}{/literal}
+					{literal}}{/literal}
+				{literal}}{/literal}
+			{literal}}{/literal}
+		{literal}}{/literal},
+	{/if}
+  "intf-items": {literal}{{/literal}
+    "svi-items": {literal}{{/literal}
+      "If-list": {literal}{{/literal}
+        "id": "vlan{$params.object_id}",
+        "adminSt": "{$params.admin_state}",
+        "descr": "{$params.description}",
+        {if isset($params.mtu) && $params.mtu != ""}
+    		"mtu": "{$params.mtu}",
+        {/if}
+        "rtvrfMbr-items": {literal}{{/literal}
+            {if {$FIRMWARE} == "9.3(3)"}
+				"tDn": "/System/inst-items/Inst-list[mode='\''{$params.vrf}'\'']"
+			{else if {$FIRMWARE} == "9.3(5)" || {$FIRMWARE} == "9.3(9)" || {$FIRMWARE} == "9.3(10)" || {$FIRMWARE} == "10.2(4)"}
+				"tDn": "/System/inst-items/Inst-list[name='\''{$params.vrf}'\'']"
+			{else}
+				"tDn": "/System/inst-items/Inst-list[name='\''{$params.vrf}'\'']"
+			{/if}
+            {literal}}{/literal}
+       {literal}}{/literal}
+     {literal}}{/literal}
+   {literal}}{/literal},
+   "pim-items": {literal}{{/literal}
+     "inst-items": {literal}{{/literal}
+      "dom-items": {literal}{{/literal}
+        "Dom-list": {literal}{{/literal}
+	        {if isset($params.vrf)}
+	        	"name": "{$params.vrf}",
+	        {else}
+	        	"name": "default",
+	        {/if}
+          "if-items": {literal}{{/literal}
+            "If-list": {literal}{{/literal}
+              "id": "vlan{$params.object_id}",
+            	{if $params.enable_multicast == true}
+            		"pimSparseMode": "true"
+            	{else}
+            		"pimSparseMode": "false"
+            	{/if}
+            {literal}}{/literal}
+          {literal}}{/literal}
+        {literal}}{/literal}
+      {literal}}{/literal}
+    {literal}}{/literal}
+  {literal}}{/literal}
+  {if $params.enable_anycast_gateway == true || ($params.enable_anycast_gateway == false && $General_Vlan_Interfaces.{$params.object_id}.enable_anycast_gateway == true)}
+  ,
+  "hmm-items": {literal}{{/literal}
+		"fwdinst-items": {literal}{{/literal}
+			"if-items": {literal}{{/literal}
+				"FwdIf-list": {literal}{{/literal}
+					"id": "vlan{$params.object_id}"
+					{if $params.enable_anycast_gateway == true}
+						,"mode": "anycastGW"
+					{else if $params.enable_anycast_gateway == false}
+						,"mode": "standard"
+					{/if}
+            	{literal}}{/literal}
+			{literal}}{/literal}
+		{literal}}{/literal}
+	{literal}}{/literal}
+	{/if}
+ {literal}}{/literal}]]></operation>
+    <rest>PATCH</rest>
+    <xpath>/restconf/data/Cisco-NX-OS-device:System</xpath>
+  </command>
+  <command name="CONSTRAINT">
+    <operation><![CDATA[{if floatval({$params.object_id}) != intval({$params.object_id})}
+Invalid vlan_id value {$params.object_id} entered. Valid type: Integer
+{/if}
+{if preg_match("/management/", $params.vrf)}
+Invalid value 'management' in field 'vrf'!
+You cannot choose 'management'as vrf as it can only be assigned to interface mgmt0.
+{/if}
+{if $params.object_id > 4094 || $params.object_id < 2}
+Invalid vlan_id value {$params.object_id} entered. Valid range: 2-4094
+{/if}
+{if isset($params.mtu) && $params.mtu != "" && ($params.mtu > 9216 || $params.mtu < 579)}
+Invalid mtu value {$params.mtu} entered. Valid range: 579-9216
+{/if}
+{$count1=strlen({$params.description})}
+{if {$count1} > 240}
+Max character limit (240) reached. You've entered {$count1} characters for description.
+{/if}
+{$cnt=0}
+{foreach $params.ip_list as $ip_list_item}
+{if $params.enable_ip_forward}
+Error: 'IP-Address' and 'enable_ip_forward' cannot be set together.
+{/if}
+{if not preg_match("/^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.)(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.)(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.)([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))$/", $params.ip_list.{$ip_list_item@index}.ip_address)}
+Invalid IP-Address entered. Valid syntax is IP-Address with subnet e.g. xxx.xxx.xxx.xxx/xx
+{/if}
+{if isset($ip_list_item.ip_address) && floatval({$params.ip_list.{$ip_list_item@index}.routing_tag}) != intval({$params.ip_list.{$ip_list_item@index}.routing_tag})}
+Invalid routing_tag value {$params.ip_list.{$ip_list_item@index}.routing_tag} entered. Valid type: Integer
+{/if}
+{if isset($params.ip_list.{$ip_list_item@index}.routing_tag) && $params.ip_list.{$ip_list_item@index}.routing_tag != "" && ($params.ip_list.{$ip_list_item@index}.routing_tag > 4294967295 || $params.ip_list.{$ip_list_item@index}.routing_tag < 0)}
+Invalid routing_tag value {$params.ip_list.{$ip_list_item@index}.routing_tag} entered. Valid range: 0-4294967295
+{/if}
+{if $ip_list_item.type == "primary"}
+{$cnt=$cnt+1}
+{/if}
+{/foreach}
+{if $cnt > 1 }
+Error: Only 1 ip-address 'type' is expected as 'primary'.
+{/if}
+{foreach $params.dhcp_relay_servers as $dhcp_relay_servers_item}
+{if $dhcp_relay_servers_item.ip_address == ""}
+Missing: Dhcp Ip_address is required to be set.
+{/if}
+{/foreach}]]></operation>
+  </command>
+  <command name="DELETE">
+    <rest>DELETE</rest>
+    <xpath>/restconf/data/Cisco-NX-OS-device:System/intf-items/svi-items/If-list=vlan{$params.object_id}</xpath>
+  </command>
+  <command name="LIST"/>
+</ObjectDefinition>

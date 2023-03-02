@@ -1,0 +1,127 @@
+<ObjectDefinition>
+  <information>
+    <icon>none</icon>
+    <description></description>
+    <displayField>object_id</displayField>
+    <serviceTaskType/>
+    <order>0</order>
+    <visibility>5</visibility>
+    <configType>xml</configType>
+    <createTemplateId/>
+    <createTemplateObject/>
+    <defaultDisplay>false</defaultDisplay>
+    <dynamic>false</dynamic>
+    <importIfMandatoryPresent>false</importIfMandatoryPresent>
+    <maxInstances>0</maxInstances>
+    <relatedObjects/>
+    <name>Overlay_L2_Tenants-vn_segment</name>
+    <group>Default</group>
+    <importonce>false</importonce>
+    <importrank>3</importrank>
+    <reorderinstances>false</reorderinstances>
+    <sortascending>false</sortascending>
+    <sortauto>false</sortauto>
+    <sortnumerical>false</sortnumerical>
+    <sortvariable>params._order</sortvariable>
+  </information>
+  <variables frozen="0">
+    <variable displayName="VLAN ID" name="params.object_id" startIncrement="0" type="ObjectRef" mandatoryArray="false" visible="true" description="" groupSeparator="" groupDisplayName="" maxLength="100" displayOrder="0" increment="0" refServiceURI="" keepOnImport="false" editable="false" onlyDetailView="false" localVarNameMatch="" remoteVarNameMatch="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" displayNameHeader="" fullDisplayName="" isCompositeKey="false" isMandatory="true" isUserLocked="false" isGrouped="false" isSearchable="false" isUniqueGlobal="false">
+      <classes>
+        <class>General_VLANs</class>
+      </classes>
+    </variable>
+    <variable displayName="VNI ID" name="params.vni" startIncrement="0" type="String" mandatoryArray="false" visible="true" description="" groupSeparator="" groupDisplayName="" maxLength="100" displayOrder="0" increment="0" refServiceURI="" keepOnImport="false" editable="false" onlyDetailView="false" localVarNameMatch="" remoteVarNameMatch="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" displayNameHeader="" fullDisplayName="" isCompositeKey="false" isMandatory="true" isUserLocked="false" isGrouped="false" isSearchable="false" isUniqueGlobal="false"/>
+    <variable displayName="VLAN Name" name="params.VLAN_name" startIncrement="0" type="String" mandatoryArray="false" visible="true" description="" groupSeparator="" groupDisplayName="" maxLength="100" displayOrder="0" increment="0" refServiceURI="" keepOnImport="false" editable="false" onlyDetailView="false" localVarNameMatch="" remoteVarNameMatch="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" displayNameHeader="" fullDisplayName="" isCompositeKey="false" isMandatory="false" isUserLocked="false" isGrouped="false" isSearchable="false" isUniqueGlobal="false"/>
+  </variables>
+  <example>
+    <content> &lt;bd-items&gt;
+    &lt;bd-items&gt;
+      &lt;BD-list&gt;
+        &lt;fabEncap&gt;vlan-200&lt;/fabEncap&gt;
+        &lt;accEncap&gt;vxlan-200200&lt;/accEncap&gt;
+        &lt;name&gt;example-200&lt;/name&gt;
+      &lt;/BD-list&gt;
+    &lt;/bd-items&gt;
+  &lt;/bd-items&gt;</content>
+  </example>
+  <command name="IMPORT">
+    <operation><![CDATA[GET]]></operation>
+    <post_template>{assign_object_variable var=&quot;_order&quot; value={$params.object_id}}
+{if $params.VLAN_name == &quot;&quot;}
+{assign_object_variable var=&quot;VLAN_name&quot; value=&quot;VLAN{$params.object_id}&quot;}
+{/if}</post_template>
+    <parser>
+      <section>
+        <regexp>@^\s \s*$@</regexp>
+        <xpath>//bd-items/BD-list/accEncap/..</xpath>
+      </section>
+      <lines>
+        <line>
+          <array/>
+          <regexp>@&lt;fabEncap&gt;vlan-(?&lt;object_id&gt;.*)&lt;/fabEncap&gt;@</regexp>
+          <xpath>fabEncap</xpath>
+        </line>
+        <line>
+          <array/>
+          <regexp>@&lt;accEncap&gt;vxlan-(?&lt;vni&gt;.*)&lt;/accEncap&gt;@</regexp>
+          <xpath>accEncap</xpath>
+        </line>
+        <line>
+          <array/>
+          <regexp>@&lt;name&gt;(?&lt;VLAN_name&gt;.*)&lt;/name&gt;@</regexp>
+          <xpath>name</xpath>
+        </line>
+      </lines>
+    </parser>
+    <xpath>/restconf/data/Cisco-NX-OS-device:System/bd-items</xpath>
+  </command>
+  <command name="CREATE">
+    <operation><![CDATA[{literal}{{/literal}"bd-items": {literal}{{/literal}
+        "BD-list": {literal}[{/literal}
+          {literal}{{/literal}
+            "accEncap": "vxlan-{$params.vni}",
+            "fabEncap": "vlan-{$params.object_id}"
+            {if $params.VLAN_name != ""}
+               {if not preg_match("/VLAN([2-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-4][0-9][0-9][0-9])/", $params.VLAN_name)}
+                	
+            	,"name": "{$params.VLAN_name}"
+            	{/if}
+            	
+            {/if}
+          {literal}}{/literal}
+        {literal}]{/literal}
+      {literal}}{/literal}
+{literal}}{/literal}]]></operation>
+    <rest>PATCH</rest>
+    <xpath>/restconf/data/Cisco-NX-OS-device:System/bd-items</xpath>
+  </command>
+  <command name="READ"/>
+  <command name="UPDATE">
+    <operation><![CDATA[{literal}{{/literal}"bd-items": {literal}{{/literal}
+        "BD-list": {literal}[{/literal}
+          {literal}{{/literal}
+            "accEncap": "vxlan-{$params.vni}",
+            "fabEncap": "vlan-{$params.object_id}"
+            {if $params.VLAN_name != ""}
+              
+            	,"name": "{$params.VLAN_name}"
+            	{/if}
+            {/if}
+          {literal}}{/literal}
+        {literal}]{/literal}
+      {literal}}{/literal}
+{literal}}{/literal}]]></operation>
+    <rest>PATCH</rest>
+    <xpath>/restconf/data/Cisco-NX-OS-device:System/bd-items</xpath>
+  </command>
+  <command name="CONSTRAINT">
+    <operation><![CDATA[{if $params.object_id > 4094 || $params.object_id < 2}
+Invalid VLAN_ID value {$params.object_id} entered. Valid range: 2-4094
+{/if}]]></operation>
+  </command>
+  <command name="DELETE">
+    <rest>DELETE</rest>
+    <xpath>/restconf/data/Cisco-NX-OS-device:System/bd-items/bd-items/BD-list=vlan-{$params.object_id}</xpath>
+  </command>
+  <command name="LIST"/>
+</ObjectDefinition>
