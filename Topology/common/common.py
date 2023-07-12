@@ -17,15 +17,17 @@ from msa_sdk import constants
 
 dev_var = Variables()
 context = Variables.task_call(dev_var)
-
-MS_General_CDP_Neighbors         = 'General_CDP_Neighbors'        #MS filename to get LDDP neighbors
-MS_GENERAL_HARDWARE_INFORMATION  = 'General_Hardware_Information' #MS filename for serial number
-MS_General_Vlan_Interfaces       = 'General_Vlan_Interfaces'      #MS General_Vlan_Interfaces.xml
-MS_Overlay_L2_Tenants_vn_segment = 'Overlay_L2_Tenants-vn_segment' 
-MS_Overlay_L3_Tenants            = 'Overlay_L3_Tenants'  #VRF
-MS_BGP_Neighbors                 = 'BGP_Neighbors'
+ 
+MS_LIST = { 'MS_CDP'           : 'General_CDP_Neighbors', 
+            'MS_HARDWARE'      : 'General_Hardware_Information', #MS filename for serial number
+            'MS_VLAN'          : 'General_Vlan_Interfaces',      
+            'MS_VXLAN'         : 'Overlay_L2_Tenants-vn_segment', 
+            'MS_VRF'           : 'Overlay_L3_Tenants',  
+            'MS_BGP'           : 'BGP_Neighbors', 
+            'MS_OSPF'          : 'OSPF_Neighbors'
+}
 #MS_Underlay_OSPF_Neighbors      = 'Underlay_OSPF_Neighbors'
-MS_OSPF_Neighbors                = 'OSPF_Neighbors'
+
 
 
 def send_continuous_request_on_MS_NETWORK(command, devicelongid, MS, param, stop_if_error= True, timeout = 120, interval = 10):
@@ -84,8 +86,19 @@ def get_device_status (device_id):
 def get_all_existing_devices_in_MSA_and_status():
   # Get all devices in the MSA for this customer_id
   global existing_devices_id_msa, existing_devices_name_msa, NOT_FOUND
+  if not context.get('customer_external_ref'):
+    #get customer external_ref
+    customer = Customer()
+    customer.get_customer_by_id(context['UBIQUBEID'][4:])
+    customer_detail = customer.content
+    context['customer_det_str'] = customer_detail
+    customer_detail = json.loads(customer_detail)
+    if customer_detail.get('externalReference'):
+      customer_external_ref = customer_detail['externalReference']
+      context['customer_external_ref'] = customer_external_ref
+  customer_external_ref = context['customer_external_ref']
   lookup      = Lookup()
-  lookup.look_list_device_by_customer_ref(context['UBIQUBEID'])
+  lookup.look_list_device_by_customer_ref(customer_external_ref)
   device_list = lookup.content
   context['device_list_result_str'] = device_list
   device_list = json.loads(device_list)
@@ -93,7 +106,7 @@ def get_all_existing_devices_in_MSA_and_status():
   existing_devices_name_msa = {}
   #existing_devices_per_IP    = {}
   for device in device_list:
-    # device: {"id": 497,  "prefix": "sds", "ubiId": "sds497", "externalReference": "sds497",  "name": "LEAF-05"}
+    # device: {"id": 497,  "prefix": "ubi", "ubiId": "ubi497", "externalReference": "ubi497",  "name": "LEAF-05"}
     if device.get('name') and device.get('externalReference') and device.get('ubiId'):
       new_device                      = {}
       new_device['name']              = device['name']
@@ -109,7 +122,7 @@ def get_all_existing_devices_in_MSA_and_status():
       #Long deviceObj    = Device(device_id= devicelongid) 
       #Long device_detail = deviceObj.read()
       #Long device_detail = json.loads(device_detail)
-      #Long # device_detail = "{  "manufacturerId" : 1,  "modelId" : 22032401,  "managementAddress" : "192.168.130.108",  "reporting" : true,  "useNat" : false,  "logEnabled" : true,  "logMoreEnabled" : true,  "managementInterface" : "",  "mailAlerting" : false,  "passwordAdmin" : "sds123!!",  "externalReference" : "sds493",  "login" : "xxxx",  "name" : "leaf-08",  "password" : "xxxx",  "id" : 493,  "snmpCommunity" : "xxxxx",  "sdNature" : "PHSL",  "hostname" : "",  "managementPort" : 80,  "monitoringPort" : 161}"   
+      #Long # device_detail = "{  "manufacturerId" : 1,  "modelId" : 22032401,  "managementAddress" : "192.168.130.108",  "reporting" : true,  "useNat" : false,  "logEnabled" : true,  "logMoreEnabled" : true,  "managementInterface" : "",  "mailAlerting" : false,  "passwordAdmin" : "ubi123!!",  "externalReference" : "ubi493",  "login" : "xxxx",  "name" : "leaf-08",  "password" : "xxxx",  "id" : 493,  "snmpCommunity" : "xxxxx",  "sdNature" : "PHSL",  "hostname" : "",  "managementPort" : 80,  "monitoringPort" : 161}"
       #Long new_device['management_address']         = device_detail['managementAddress']
       #Long new_device['device_nature']              = device_detail['sdNature']
       new_device['device_nature']              = 'PHSL'
@@ -133,8 +146,8 @@ def get_device_name_from_device_id(device_id):
 
 
 def get_device_serial_number(device_id, device_name):
-  global MS_GENERAL_HARDWARE_INFORMATION
-
+  global MS_LIST
+  MS = MS_LIST['MS_HARDWARE']
   devicelongid = device_id[3:]
   order = Order(devicelongid)
   ms_input = {}
@@ -142,8 +155,8 @@ def get_device_serial_number(device_id, device_name):
   obj = {}
   obj['need_for_import'] = ms_input  
   params = {}
-  params[MS_GENERAL_HARDWARE_INFORMATION] = obj
-  # IMPORT ONLY the MS MS_GENERAL_HARDWARE_INFORMATION
+  params[MS] = obj
+  # IMPORT ONLY the MS
   order.command_execute('IMPORT', params, 120)
   # convert dict object into json
   response = json.loads(order.content)
@@ -156,17 +169,17 @@ def get_device_serial_number(device_id, device_name):
       message = response["wo_new_params"]
     message = json.loads(message)
     #context['direct_serial_numbers_resp_'+device_id] = message
-    if message.get(MS_GENERAL_HARDWARE_INFORMATION):
+    if message.get(MS):
       # "message": "{"General_Hardware_Information":{"1":{"object_id":"1","serial_number":"9TMPYOOJXVV"}}}",
-      for key, val in message[MS_GENERAL_HARDWARE_INFORMATION].items():
+      for key, val in message[MS].items():
         if val.get('serial_number') and val['serial_number']:
           return val['serial_number']
   return ''
 
   
 def find_direct_neighbors_for_one_device_CDP(device_id):
-  global MS_General_CDP_Neighbors
-  MS = MS_General_CDP_Neighbors
+  global  MS_LIST
+  MS = MS_LIST['MS_CDP']
   # Task_Get_Device_Neighbours_List.py
   devicelongid = device_id[3:]
   order = Order(devicelongid)
@@ -180,7 +193,7 @@ def find_direct_neighbors_for_one_device_CDP(device_id):
   # IMPORT ONLY the MS MS_General_CDP_Neighbors
   order.command_execute('IMPORT', params, 120)
   # convert dict object into json
-  #context['CDP_response_'+device_id+'_serialized'] = order.content
+  context['CDP_response_'+device_id+'_serialized'] = order.content
   response = json.loads(order.content)
 
   direct_neighbor_temp = {}
@@ -259,8 +272,8 @@ def find_direct_neighbors_for_SNMP(device_id):
 
 def find_direct_neighbors_for_VLAN(device_id):
   #Get subnets from interfaces
-  global MS_General_Vlan_Interfaces
-  MS = MS_General_Vlan_Interfaces
+  global  MS_LIST
+  MS = MS_LIST['MS_VLAN']
   devicelongid = device_id[3:]
 
   direct_neighbor = {}
@@ -303,8 +316,8 @@ def find_direct_neighbors_for_VLAN(device_id):
 
 
 def find_direct_neighbors_for_VXLAN(device_id):
-  global MS_Overlay_L2_Tenants_vn_segment
-  MS = MS_Overlay_L2_Tenants_vn_segment
+  global  MS_LIST
+  MS = MS_LIST['MS_VXLAN']
   devicelongid = device_id[3:]
 
   direct_neighbor = {}
@@ -338,10 +351,15 @@ def find_direct_neighbors_for_VXLAN(device_id):
           createTopologyNetwork(vni_objID, vni, 'network','', '', "#3118f0")  # color #3118f0 blue
         if result.get('object_id') and result.get('vni'):
           VLAN_id = 'vlan'+result['object_id']  
+          
           direct_neighbor[VLAN_id] = 1
           VLAN_id_objID =  VLAN_id.replace('.','_')
           links = []
-          links.append('vni'+result['vni'])
+          #links.append('vni'+result['vni'])
+          link={}
+          link['link']  = 'vni'+result['vni'];
+          link['label'] = "VXLAN VIEW ... ";
+          links.append(link)
           createTopologyNetwork(VLAN_id_objID, VLAN_id, 'network', '', links, "#f7f30a") # color #f7f30a yellow
   #context['vxlan_result_'+devicelongid+'_serialized'] = json.dumps(direct_neighbor)
 
@@ -349,9 +367,9 @@ def find_direct_neighbors_for_VXLAN(device_id):
 
 
 def find_direct_neighbors_for_VXLAN_VRF(device_id):
-  global MS_Overlay_L2_Tenants_vn_segment, MS_Overlay_L3_Tenants
-  MS = MS_Overlay_L2_Tenants_vn_segment
-  MS2 = MS_Overlay_L3_Tenants
+  global  MS_LIST
+  MS  = MS_LIST['MS_VXLAN']
+  MS2 = MS_LIST['MS_VRF']
   devicelongid = device_id[3:]
 
   direct_neighbor = {}
@@ -389,7 +407,11 @@ def find_direct_neighbors_for_VXLAN_VRF(device_id):
           direct_neighbor[VLAN_id] = 1
           VLAN_id_objID =  VLAN_id.replace('.','_')
           links = []
-          links.append('vni'+result['vni'])
+          #links.append('vni'+result['vni'])
+          link={}
+          link['link']  = 'vni'+result['vni'];
+          link['label'] = "VXLAN VIEW ... ";
+          links.append(link)
           createTopologyNetwork(VLAN_id_objID, VLAN_id, 'network', '', links, "#3118f0")  # color #3118f0 blue
     if message.get(MS2):
       # "1104":{"vni":"50001","_order":"1104","VLAN_name": "example-vlan1104","object_id":"1104"},
@@ -400,7 +422,11 @@ def find_direct_neighbors_for_VXLAN_VRF(device_id):
               vrf = 'vrf'+ vrf
               vrf_objID =  vrf.replace('.','_')
               links = []
-              links.append('vni'+result['vni'])
+              #links.append('vni'+result['vni'])
+              link={}
+              link['link']  = 'vni'+result['vni'];
+              link['label'] = "VXLAN VIEW ... ";
+              links.append(link)
               createTopologyNetwork(vrf_objID, vrf, 'network','', links, "#f7f30a") # color #f7f30a yellow
     
   #context['vxlan_result_'+devicelongid+'_serialized'] = json.dumps(direct_neighbor)
@@ -409,8 +435,8 @@ def find_direct_neighbors_for_VXLAN_VRF(device_id):
 
 
 def find_direct_neighbors_for_VRF(device_id):
-  global MS_Overlay_L3_Tenants
-  MS = MS_Overlay_L3_Tenants
+  global MS_LIST
+  MS  = MS_LIST['MS_VRF']
   devicelongid = device_id[3:]
 
   direct_neighbor = {}
@@ -447,11 +473,14 @@ def find_direct_neighbors_for_VRF(device_id):
             if  vrf != 'default' and vrf != 'management':
               vrf = 'vrf'+ vrf
               vrf_objID =  vrf.replace('.','_')
-              links = []
+              links = []              
               if result.get('vni'):
-                links.append('vni'+result['vni'])
-
-              createTopologyNetwork(vrf_objID, vrf, 'network','', links, "#f7f30a") # color #f7f30a yellow
+                #links.append('vni'+result['vni'])
+                link={}
+                link['link']  = 'vni'+result['vni'];
+                link['label'] = "VXLAN VIEW ... ";
+                links.append(link)
+                createTopologyNetwork(vrf_objID, vrf, 'network','', links, "#f7f30a") # color #f7f30a yellow
 
               #direct_neighbor[vrf] = 1
   #context['vrf_result_'+devicelongid+'_serialized'] = json.dumps(direct_neighbor)
@@ -461,8 +490,8 @@ def find_direct_neighbors_for_VRF(device_id):
 
 def find_direct_neighbors_for_OSPF(device_id):
   #TO FINISH
-  global MS_OSPF_Neighbors
-  MS = MS_OSPF_Neighbors
+  global MS_LIST
+  MS  = MS_LIST['MS_OSPF']
   devicelongid = device_id[3:]
 
   direct_neighbor = {}
@@ -504,8 +533,8 @@ def find_direct_neighbors_for_OSPF(device_id):
 
 def find_direct_neighbors_for_BGP(device_id):
   #TO FINISH
-  global MS_BGP_Neighbors
-  MS = MS_BGP_Neighbors
+  global MS_LIST
+  MS  = MS_LIST['MS_BGP']
   devicelongid = device_id[3:]
   #existing_devices_per_IP = json.loads(context['existing_devices_per_IP_serialized'])
 

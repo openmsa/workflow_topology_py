@@ -78,7 +78,11 @@ for device_id, device in existing_devices_id_msa.items():
     
     if isinstance(direct_neighbor, dict):
       for link in direct_neighbor:
-        neighbors.append(link)
+        link1={}
+        link1['link']  = link;
+        #link1['label'] = "Main label "+link;
+        link1['label'] = "Main1 label "+link+"\n"+"Main2 label "+link+"\n"+"Main3 label "+link;
+        neighbors.append(link1)
         
     device['subtype'] = 'NETWORK'
 
@@ -88,7 +92,7 @@ for device_id, device in existing_devices_id_msa.items():
   device['links'] = neighbors
 
 
-#Convert hash table into array for Topology view_name
+#Convert hash table into array for Topology view_type
 nodes = []
 for device_id, device in existing_devices_id_msa.items():
 
@@ -135,5 +139,5 @@ context['Nodes'] = nodes
 context['existing_devices_id_msa_serialized']     = json.dumps(existing_devices_id_msa)
 context['existing_devices_name_msa_serialized']   = json.dumps(existing_devices_name_msa)
   
-MSA_API.task_success('OPERATION ENDED, topology schema "' + context['view_name'] + '" updated',context, True)
+MSA_API.task_success('OPERATION ENDED, topology schema "' + context['view_type'] + '" updated',context, True)
    
