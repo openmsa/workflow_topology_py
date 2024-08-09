@@ -31,7 +31,7 @@ from common.common import *
  
 
 #if not context['ipam_device_id'] :
-#	MSA_API.task_error('Mandatory parameters required',context, True)
+#  MSA_API.task_error('Mandatory parameters required',context, True)
 
 # Get all devices in the MSA for this customer_id
 get_all_existing_devices_in_MSA_and_status()
@@ -41,71 +41,59 @@ not_existing_device_in_msa        = {}
 context['Nodes_MAJ']              = []
 context['other_nodes_serialized'] = ''
 
-# read the ID of the selected managed entity
-#curent_device_id = context['ipam_device_id']
-existing_devices_id_msa   = json.loads(context['existing_devices_id_msa_serialized'])
-existing_devices_name_msa = json.loads(context['existing_devices_name_msa_serialized'])
-for device_id, device in existing_devices_id_msa.items():
-  devicelongid = device_id[3:]
-  neighbors = []
-  if device['status'] == 'OK':
-    if context['view_type'] == 'CDP': 
-      #find his direct neighbor from CDP MS
-      direct_neighbor = find_direct_neighbors_for_one_device_CDP(device_id)
-    elif context['view_type'] == 'SNMP': 
-      #find his direct neighbor from snmp command v2
-      direct_neighbor = find_direct_neighbors_for_SNMP(device_id)
-    elif context['view_type'] == 'VLAN': 
-      #find his direct neighbor from MS_General_Vlan_Interfaces
-      direct_neighbor = find_direct_neighbors_for_VLAN(device_id)
-    elif context['view_type'] == 'VXLAN': 
-      #find his direct neighbor from Overlay_L2_Tenants-vn_segment.xml
-      direct_neighbor = find_direct_neighbors_for_VXLAN(device_id)
-    elif context['view_type'] == 'VXLAN_VRF': 
-      #find his direct neighbor from Overlay_L2_Tenants-vn_segment.xml and Overlay_L3_Tenants.xml
-      direct_neighbor = find_direct_neighbors_for_VXLAN_VRF(device_id)
-    elif context['view_type'] == 'OSPF': 
-      #find his direct neighbor from MS_Underlay_OSPF_Neighbors
-      direct_neighbor = find_direct_neighbors_for_OSPF(device_id)
-    elif context['view_type'] == 'BGP': 
-      #find his direct neighbor from MS_Underlay_BGP_Neighbors
-      direct_neighbor = find_direct_neighbors_for_BGP(device_id)
-    elif context['view_type'] == 'VRF': 
-      #find his direct neighbor from MS Overlay_L3_Tenants.xml
-      direct_neighbor = find_direct_neighbors_for_VRF(device_id)
-    else:
-      MSA_API.task_error('TODO CONVERT PHP INTO PYTHON',context, True)
+nb_links=0
+
+if str(context['view_type']) == 'OSPF':
+  existing_devices_id_msa = find_direct_neighbors_for_OSPF()
+  
+else:
+  existing_devices_id_msa   = json.loads(context['existing_devices_id_msa_serialized'])
+  for device_id, device in existing_devices_id_msa.items():
+    devicelongid = device_id[3:]
+    neighbors = []
+    if device['status'] == 'OK':
+  
+      if device.get('name'):
+        device_name = device['name']
+      else:
+        device_name = '???'
+      if device.get('management_address'):
+        device_ip = device['management_address']
+      else:
+        device_ip = 'xxx.xxx.xxx.xxx'
     
-    if isinstance(direct_neighbor, dict):
-      for link in direct_neighbor:
-        link1={}
-        link1['link']  = link;
-        #link1['label'] = "Main label "+link;
-        link1['label'] = "Main1 label "+link+"\n"+"Main2 label "+link+"\n"+"Main3 label "+link;
-        neighbors.append(link1)
-        
-    device['subtype'] = 'NETWORK'
+      function = "find_direct_neighbors_for_" + str(context['view_type'])
+      if function in globals():
+        direct_neighbor_function = globals()[function]
+        direct_neighbor = direct_neighbor_function(device_id, device_name, device_ip)
+      else:
+        MSA_API.task_error('TODO CONVERT PHP INTO PYTHON',context, True)
+    
+      if direct_neighbor:
+        for link in direct_neighbor:
+          neighbors.append(link)
+      device['subtype'] = 'NETWORK'
 
+    #existing_devices_id_msa[device['device_id']]['neighbors'] = neighbors
+    device['links'] = neighbors
 
-
-  #existing_devices_id_msa[device['device_id']]['neighbors'] = neighbors
-  device['links'] = neighbors
-
-
+  
+  
+if context.get('other_nodes_serialized') and context['other_nodes_serialized']:
+  position_y = '150'
+else:  
+  position_y = ''
+  
 #Convert hash table into array for Topology view_type
 nodes = []
 for device_id, device in existing_devices_id_msa.items():
 
- #for i in range(8):
   node = {}
-  #node["primary_key"]  = device_id+'_'+str(i)
-  #node["name"]         = device['name']+'_'+str(i)
-  #node["object_id"]    = device_id[3:]+'_'+str(i)
   node["primary_key"]  = device_id
   node["name"]         = device['name']
   node["object_id"]    = device_id[3:]
   node["x"]            = ""
-  node["y"]            = ""
+  node["y"]            = position_y
   node["description"]  = ""
   node["subtype"]      = device['subtype']
   node["image"]        = ""
@@ -115,20 +103,16 @@ for device_id, device in existing_devices_id_msa.items():
     node["color"]        = "#db2e14"  #red
   node["hidden"]       = 'false'
   node["cluster_id"]   = ""
-  
-  #if device.get('links'):
-  #  links=[]
-  #  for link in device['links']:
-  #    links.append(link+'_'+str(i))
-  #  device['links'] = links
-    
-    
+
+  if device.get('links'):
+    nb_links = nb_links+ len(device['links'])
   node["links"]        = device['links']
   if device.get('device_nature'):
     node["device_nature"]= device['device_nature']
   node["status"]       = device['status']
   nodes.append(node)
 
+  
 if context.get('other_nodes_serialized') and context['other_nodes_serialized']:
   other_nodes = json.loads(context['other_nodes_serialized'])
   for nodeID, node in other_nodes.items() :
@@ -137,7 +121,14 @@ if context.get('other_nodes_serialized') and context['other_nodes_serialized']:
 context['Nodes_MAJ_Object_ID'] = []
 context['Nodes'] = nodes
 context['existing_devices_id_msa_serialized']     = json.dumps(existing_devices_id_msa)
-context['existing_devices_name_msa_serialized']   = json.dumps(existing_devices_name_msa)
   
+if (nb_links==0):
+  # Check if the selected MS is attached
+  if MS_VIEW_LIST.get(context['view_type']):
+    MS = MS_VIEW_LIST[context['view_type']]
+  else:
+    MS = 'Undefined'
+  MSA_API.task_success('Can not find any link, may be MS '+MS+' not attached',context, True)
+
 MSA_API.task_success('OPERATION ENDED, topology schema "' + context['view_type'] + '" updated',context, True)
    
