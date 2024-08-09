@@ -6,16 +6,8 @@
             <value>common.py</value>
         </entry>
         <entry>
-            <key>DATE_MODIFICATION</key>
-            <value>1648254439201</value>
-        </entry>
-        <entry>
             <key>REPOSITORY</key>
             <value>Process</value>
-        </entry>
-        <entry>
-            <key>DATE_CREATION</key>
-            <value>1648254439197</value>
         </entry>
         <entry>
             <key>TAG</key>

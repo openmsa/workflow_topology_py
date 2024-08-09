@@ -3,7 +3,7 @@
     <map>
         <entry>
             <key>DISPLAYNAME</key>
-            <value>Task_Update.py</value>
+            <value>Tasks</value>
         </entry>
         <entry>
             <key>REPOSITORY</key>
@@ -13,12 +13,8 @@
             <key>TAG</key>
         </entry>
         <entry>
-            <key>FILE_TYPE</key>
-            <value>text</value>
-        </entry>
-        <entry>
             <key>TYPE</key>
-            <value>UPLOAD</value>
+            <value>DIRECTORY</value>
         </entry>
         <entry>
             <key>COMMENT</key>
