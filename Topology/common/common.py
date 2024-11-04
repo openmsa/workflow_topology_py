@@ -227,7 +227,7 @@ def find_direct_neighbors_for_CDP(device_id, device_name, device_ip):
   for port, device2 in direct_neighbor_temp.items():
     if device2.get('neighbor_system_name') and device2.get('management_ip'):
       #We don't want management port (like mgmt0)
-      if not re.search("^mgmt\d",device2['object_id']): 
+      if not re.search("^mgmt\\d",device2['object_id']): 
         neighbor_device_name = device2['neighbor_system_name']
         link                 = {}
         link['link']         = neighbor_device_name
@@ -594,7 +594,7 @@ def find_direct_neighbors_for_OSPF():
             #result = {  "object_id": "po100", "vrf": "default", "ip_list": {  "0": {  "ip_address": "10.4.0.29/30",
             if result.get("object_id") and result.get("ip_list") and result["ip_list"]:
               interface_name = result['object_id']       
-              if not re.search("^mgmt\d",interface_name):        
+              if not re.search("^mgmt\\d",interface_name):        
                 for id, ip_list in result["ip_list"].items():
                   if ip_list.get('ip_address'):
                     # ip_cidr = 192.168.130.1/30, we should find all IP avaible in this range with find_all_ip_in_subnet_ipv4_or_ipv6
