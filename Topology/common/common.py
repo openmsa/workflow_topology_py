@@ -116,6 +116,7 @@ def get_all_existing_devices_in_MSA_and_status():
 
   
   device_list = json.loads(device_list)
+      util.log_to_process_file(process_id, '***device_list***')
   util.log_to_process_file(process_id, device_list)
   existing_devices_id_msa   = {}
   for device in device_list:
@@ -127,7 +128,11 @@ def get_all_existing_devices_in_MSA_and_status():
       new_device['devicelongid']      = devicelongid
       new_device['device_id']         = device['ubiId']
       new_device['externalReference'] = device['externalReference']     
+      util.log_to_process_file(process_id, '***new_device***')
+      util.log_to_process_file(process_id, new_device)
       deviceObj    = Device(device_id= devicelongid) 
+      util.log_to_process_file(process_id, '***deviceObj***')
+      util.log_to_process_file(process_id, deviceObj)
       device_detail = deviceObj.read()
       util.log_to_process_file(process_id, '***device_detail***')
       util.log_to_process_file(process_id, device_detail)
