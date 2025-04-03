@@ -129,6 +129,8 @@ def get_all_existing_devices_in_MSA_and_status():
       new_device['externalReference'] = device['externalReference']     
       deviceObj    = Device(device_id= devicelongid) 
       device_detail = deviceObj.read()
+      util.log_to_process_file(process_id, '***device_detail***')
+      util.log_to_process_file(process_id, device_detail)
       device_detail = json.loads(device_detail)
       #Long # device_detail = "{  "manufacturerId" : 1,  "modelId" : 22032401,  "managementAddress" : "192.168.130.108",  "reporting" : true,  "useNat" : false,  "logEnabled" : true,  "logMoreEnabled" : true,  "managementInterface" : "",  "mailAlerting" : false,  "passwordAdmin" : "sds123!!",  "externalReference" : "sds493",  "login" : "xxxx",  "name" : "leaf-08",  "password" : "xxxx",  "id" : 493,  "snmpCommunity" : "xxxxx",  "sdNature" : "PHSL",  "hostname" : "",  "managementPort" : 80,  "monitoringPort" : 161}"   
       new_device['management_address']         = device_detail['managementAddress']
