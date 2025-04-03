@@ -116,7 +116,7 @@ def get_all_existing_devices_in_MSA_and_status():
 
   
   device_list = json.loads(device_list)
-      util.log_to_process_file(process_id, '***device_list***')
+  util.log_to_process_file(process_id, '***device_list***')
   util.log_to_process_file(process_id, device_list)
   existing_devices_id_msa   = {}
   for device in device_list:
