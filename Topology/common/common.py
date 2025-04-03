@@ -15,9 +15,11 @@ from msa_sdk.customer import Customer
 from msa_sdk.orchestration import Orchestration
 from msa_sdk.lookup import Lookup
 from msa_sdk import constants
+from msa_sdk import util
 
 dev_var = Variables()
 context = Variables.task_call(dev_var)
+process_id = context['SERVICEINSTANCEID']
 
 MS_VIEW_LIST = { 'CDP'                         : 'General_CDP_Neighbors',
                  'HARDWARE_INFORMATION'        : 'General_Hardware_Information' , 
@@ -114,6 +116,7 @@ def get_all_existing_devices_in_MSA_and_status():
 
   
   device_list = json.loads(device_list)
+  util.log_to_process_file(process_id, device_list)
   existing_devices_id_msa   = {}
   for device in device_list:
     # device: {"id": 497,  "prefix": "sds", "ubiId": "sds497", "externalReference": "sds497",  "name": "LEAF-05"}
