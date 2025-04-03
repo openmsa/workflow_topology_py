@@ -15,8 +15,6 @@ from msa_sdk.customer import Customer
 from msa_sdk.orchestration import Orchestration
 from msa_sdk.lookup import Lookup
 from msa_sdk import constants
-#from /opt/fmc_repository/Process/common/common import *
-#from ../common.common import *
 
 dev_var = Variables()
 context = Variables.task_call(dev_var)
@@ -117,7 +115,6 @@ def get_all_existing_devices_in_MSA_and_status():
   
   device_list = json.loads(device_list)
   existing_devices_id_msa   = {}
-  #existing_devices_per_IP    = {}
   for device in device_list:
     # device: {"id": 497,  "prefix": "sds", "ubiId": "sds497", "externalReference": "sds497",  "name": "LEAF-05"}
     if device.get('name') and device.get('externalReference') and device.get('ubiId'):
@@ -126,12 +123,7 @@ def get_all_existing_devices_in_MSA_and_status():
       devicelongid                    = device['ubiId'][3:]
       new_device['devicelongid']      = devicelongid
       new_device['device_id']         = device['ubiId']
-      new_device['externalReference'] = device['externalReference']
-      #Long if device.get('serial_number'):
-      #Long   new_device['serial_number']   = device['serial_number']
-      #Long else:
-      #Long #to slow, don't need here
-      #Long new_device['serial_number']   = get_device_serial_number(device['ubiId'], device['name'])        
+      new_device['externalReference'] = device['externalReference']     
       deviceObj    = Device(device_id= devicelongid) 
       device_detail = deviceObj.read()
       device_detail = json.loads(device_detail)
@@ -143,9 +135,7 @@ def get_all_existing_devices_in_MSA_and_status():
       new_device['subtype']                    = "router"
       new_device['links']                    = []
       existing_devices_id_msa[device['ubiId']]  = new_device
-      #existing_devices_per_IP[device_detail['managementAddress']] = new_device
   context['existing_devices_id_msa_serialized']   = json.dumps(existing_devices_id_msa)
-  #context['existing_devices_per_IP_serialized']       = json.dumps(existing_devices_per_IP)
 
 
 def get_device_name_from_device_id(device_id):
@@ -770,7 +760,6 @@ def find_direct_neighbors_for_BGP(device_id, device_name, device_ip):
           link['label'] = link['label'] + 'vrf: '+neighbor_IP
           direct_neighbor.append(link)              
   
-  #context['bgp_result_'+devicelongid+'_serialized'] = json.dumps(direct_neighbor)
 
   return direct_neighbor
 
@@ -798,14 +787,4 @@ def createTopologyNetwork(nodeID, name, subType, image, neighbor={}, color="#acd
   other_nodes[nodeID]  = node
 
   context['other_nodes_serialized'] = json.dumps(other_nodes)
-  
-  #object_id = nodeID
-  # if not context.get('Nodes_MAJ_Object_ID'):
-    # context['Nodes_MAJ_Object_ID'] = {}
-  # if not context['Nodes_MAJ_Object_ID'].get(object_id):
-    # new_nodes_MAJ                = {}
-    # new_nodes_MAJ['primary_key'] =  nodeID
-    # #new_nodes_MAJ['object_id']  =  nodeID[3]
-    # new_nodes_MAJ['object_id']   =  nodeID
-    # context['Nodes_MAJ'].append(new_nodes_MAJ)
-    # context['Nodes_MAJ_Object_ID'][object_id] = 1
+
