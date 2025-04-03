@@ -130,6 +130,7 @@ def get_all_existing_devices_in_MSA_and_status():
       new_device['externalReference'] = device['externalReference']     
       util.log_to_process_file(process_id, '***new_device***')
       util.log_to_process_file(process_id, new_device)
+      util.log_to_process_file(process_id, devicelongid)
       deviceObj    = Device(device_id= devicelongid) 
       util.log_to_process_file(process_id, '***deviceObj***')
       util.log_to_process_file(process_id, deviceObj)
