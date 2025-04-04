@@ -7,11 +7,11 @@ ENV BIN_DIR=/opt/fmc_repository/Process/PythonReference/bin
 RUN install_default_dirs.sh
 
 # Install Adapter {{{
-COPY --chown=1000:1000 . /opt/fmc_repository/OpenMSA_Adapters
-RUN install_repo_deps.sh /opt/fmc_repository/OpenMSA_Adapters/
+COPY --chown=1000:1000 . /opt/fmc_repository/OpenMSA_Workflow_Topology
+RUN install_repo_deps.sh /opt/fmc_repository/OpenMSA_Workflow_Topology/
 
 # Cleanup repository {{{
-RUN rm -rf /opt/fmc_repository/OpenMSA_Adapters/{.git,docker,Dockerfile}
+RUN rm -rf /opt/fmc_repository/OpenMSA_Workflow_Topology/{.git,docker,Dockerfile}
 # }}}
 # Build tarball {{{
 RUN echo "⏳ Creating fmc-repository.tar.xz" && \
