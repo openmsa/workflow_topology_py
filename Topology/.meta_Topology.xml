@@ -2,8 +2,8 @@
 <metadata>
     <map>
         <entry>
-            <key>DISPLAYNAME</key>
-            <value>Topology.xml</value>
+            <key>TYPE</key>
+            <value>FILE</value>
         </entry>
         <entry>
             <key>REPOSITORY</key>
@@ -14,9 +14,6 @@
             <value>0</value>
         </entry>
         <entry>
-            <key>TAG</key>
-        </entry>
-        <entry>
             <key>FILE_TYPE</key>
             <value>text</value>
         </entry>
@@ -25,11 +22,8 @@
             <value>0</value>
         </entry>
         <entry>
-            <key>TYPE</key>
-            <value>FILE</value>
-        </entry>
-        <entry>
-            <key>COMMENT</key>
+            <key>DISPLAYNAME</key>
+            <value>Topology.xml</value>
         </entry>
     </map>
 </metadata>
