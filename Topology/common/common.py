@@ -264,10 +264,15 @@ def find_direct_neighbors_for_SNMP(device_id, device_name, device_ip):
         found = re.search(" IpAddress: (.+?)$", line)
         maskAdr      = found.group(1)
         mask = ipaddress.IPv4Network('0.0.0.0/'+maskAdr, False).prefixlen
-        util.log_to_process_file(process_id, '* mask' + str(mask))
-        util.log_to_process_file(process_id, '* iface' + str(address_link + '/' + maskAdr))
+        util.log_to_process_file(process_id, '* maskAdr ' + str(maskAdr))
+        util.log_to_process_file(process_id, '* iface ' + str(address_link + '/' + maskAdr))
 
-        iface = ipaddress.ip_interface(str(address_link) + '/' + str(maskAdr))
+        try:
+            iface = ipaddress.ip_interface(str(address_link) + '/' + str(maskAdr))
+        except ValueError:
+            util.log_to_process_file(process_id, f"Invalid subnet mask: {maskAdr}")
+            continue
+        network = iface.network
         network_address = str(iface.network.network_address)
         network_and_mask = network_address +'/' + str(mask)
         #context['snmp_res_IP'+devicelongid+'_'+line] = 'address_link=' + address_link +', maskAdr ='+maskAdr  +' mask='+str(mask)+ ' network_and_mask='+network_and_mask
