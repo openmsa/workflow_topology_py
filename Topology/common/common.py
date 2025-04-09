@@ -267,7 +267,7 @@ def find_direct_neighbors_for_SNMP(device_id, device_name, device_ip):
         util.log_to_process_file(process_id, '* mask' + str(mask))
         util.log_to_process_file(process_id, '* iface' + str(address_link + '/' + maskAdr))
 
-        iface = ipaddress.ip_interface(unicode(address_link + '/' +str(mask)))
+        iface = ipaddress.ip_interface(str(address_link) + '/' + str(maskAdr))
         network_address = str(iface.network.network_address)
         network_and_mask = network_address +'/' + str(mask)
         #context['snmp_res_IP'+devicelongid+'_'+line] = 'address_link=' + address_link +', maskAdr ='+maskAdr  +' mask='+str(mask)+ ' network_and_mask='+network_and_mask
