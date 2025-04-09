@@ -1,4 +1,4 @@
-Kibana Deployment Workflow
+Topology compute Workflow
 =========
 
 This repository provides the workflow for deploying the workflow that creates the Topology dataset.
@@ -14,7 +14,7 @@ The procedure below is for developer who are going to code changes on a MSActiva
 Login to a live MSA as root and perform the following:
 
 	cd /opt/fmc_repository
-	git clone https://github.com/openmsa/workflow_kibana.git OpenMSA_Workflow_Topology
+	git clone https://github.com/openmsa/workflow_topology_py.git OpenMSA_Workflow_Topology
 	cd Process/
 	ln -s ../OpenMSA_Workflow_Topology/ OpenMSA_Workflow_Topology
 	
