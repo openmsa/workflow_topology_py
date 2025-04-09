@@ -263,7 +263,7 @@ def find_direct_neighbors_for_SNMP(device_id, device_name, device_ip):
         address_link = found.group(1)
         found = re.search(" IpAddress: (.+?)$", line)
         maskAdr      = found.group(1)
-        mask = ipaddress.IPv4Network('0.0.0.0/'+maskAdr).prefixlen
+        mask = ipaddress.IPv4Network('0.0.0.0/'+maskAdr, False).prefixlen
         util.log_to_process_file(process_id, '* mask' + str(mask))
         util.log_to_process_file(process_id, '* iface' + str(address_link + '/' + maskAdr))
 
