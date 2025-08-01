@@ -104,6 +104,11 @@ def get_all_existing_devices_in_MSA_and_status():
       new_device['device_nature']              = device_detail['sdNature']
       new_device['status']                     = get_device_status(devicelongid)
       new_device['subtype']                    = "router"
+      # Filter Inventory models that should not be added to nodes i.e. that should not be displayed
+      if device_detail['manufacturerId'] == 2070002 and device_detail['modelId'] == 2070002:
+        new_device['displayInTopology'] = False
+      else:
+        new_device['displayInTopology'] = True
       new_device['modelId'] = device_detail['modelId']
       new_device['links']                    = []
       existing_devices_id_msa[device['ubiId']]  = new_device
@@ -373,7 +378,7 @@ def find_direct_neighbors_for_VRF(devicelongid, device_name, device_ip, MS):
 
   
 
-def find_direct_neighbors_for_OSPF():
+def find_direct_neighbors_for_OSPF(dummy1, dummy2, dummy3, dummy4):
   global MS_VIEW_LIST
   global existing_devices_id_msa
   #For OSPF, we should get the interface name from underlay_OSPF_Neighbors and the range of IP for each interface from 'General_Interfaces'
@@ -401,7 +406,7 @@ def find_direct_neighbors_for_OSPF():
         if message.get(MS['OSPF_IP']):
           for result in message.get(MS['OSPF_IP']).values():
             #  ip_list.0.ip_address  
-            context['import_resultat_'+MS_IP+'_'+device_id+'_OSPF=']= result
+            context['import_resultat_' + MS['OSPF_IP'] + '_' + device_id + '_OSPF='] = result
             #result = {  "object_id": "po100", "vrf": "default", "ip_list": {  "0": {  "ip_address": "10.4.0.29/30",
             if result.get("object_id") and result.get("ip_list") and result["ip_list"]:
               interface_name = result['object_id']       
@@ -423,7 +428,7 @@ def find_direct_neighbors_for_OSPF():
         #Get  router_ID from "General_OSPF_Base"
         if message.get(MS['OSPF_router_ID']):
           for result in message.get(MS['OSPF_router_ID']).values():
-            context['import_resultat_'+MS_router_ID+'_'+device_id+'_OSPF=']= result
+            context['import_resultat_' + MS['OSPF_router_ID'] + '_' + device_id + '_OSPF='] = result
             #result =  { "UNDERLAY": { "object_id": "UNDERLAY", "dom_list": { "0": {  "name": "default",  "router_id": "10.2.0.7",
             if result.get("object_id") and result.get("dom_list"):
               for id2, dom_list in result["dom_list"].items():
@@ -437,7 +442,7 @@ def find_direct_neighbors_for_OSPF():
           for result in message.get(MS['OSPF']).values():
              # vrf_list.0.interface_list.0.interface_name
              # vrf_list.0.interface_list.0.state
-             context['import_resultat_'+MS+'_'+device_id+'_OSPF=']= result
+             context['import_resultat_' + MS['OSPF'] + '_' + device_id + '_OSPF='] = result
              #result = { "object_id": "UNDERLAY", "vrf_list": { 0": {   "interface_list": {  "0": {  "interface_name": "po100", "state": "full","ospf_neighbor": "10.2.0.7"
 
              if result.get("object_id") and result.get("vrf_list") and result["object_id"]  == "UNDERLAY":
@@ -560,6 +565,13 @@ def find_direct_neighbors_for_Tunnels(devicelongid, device_name, device_ip, MS):
 
   return None
 
+def find_direct_neighbors_for_Generic(devicelongid, device_name, device_ip, MS):
+  message = do_import(devicelongid, MS)
+  if message.get(MS['Generic']):
+    result = message[MS['Generic']]
+    # TODO
+  return None
+
 # In the following dictionary keys should match the topology type in Topology.xml
 function_map = { 'CDP'                         : find_direct_neighbors_for_CDP,
                  'SNMP'                        : find_direct_neighbors_for_SNMP,
@@ -569,7 +581,8 @@ function_map = { 'CDP'                         : find_direct_neighbors_for_CDP,
                  'VRF'                         : find_direct_neighbors_for_VRF, 
                  'OSPF'                        : find_direct_neighbors_for_OSPF,
                  'BGP'                         : find_direct_neighbors_for_BGP,
-                 'Tunnels'                     : find_direct_neighbors_for_Tunnels
+                 'Tunnels'                     : find_direct_neighbors_for_Tunnels,
+                 'Generic'                     : find_direct_neighbors_for_Generic
                }
 
 def createTopologyNetwork(nodeID, name, subType, image, neighbor={}, color="#acd7e5"):

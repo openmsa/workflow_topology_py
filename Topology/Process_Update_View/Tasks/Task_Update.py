@@ -82,31 +82,32 @@ if context.get('other_nodes_serialized') and context['other_nodes_serialized']:
     nodes.append(node)
 
 for device_id, device in existing_devices_id_msa.items():
-  if device['device_id'] not in other_nodes:
-    # Do not add device already in other_nodes
-    node = {}
-    node["primary_key"]  = device_id
-    node["name"]         = device['name']
-    node["object_id"]    = device_id[3:]
-    node["x"]            = ""
-    node["y"]            = position_y
-    node["description"]  = ""
-    node["subtype"]      = device['subtype']
-    node["image"]        = ""
-    if device.get('status') and device['status'] == 'OK':
-      node["color"]        = "#acd7e5"  #green
-    else:
-      node["color"]        = "#db2e14"  #red
-    node["hidden"]       = 'false'
-    node["cluster_id"]   = ""
+  if device['displayInTopology']:
+    if device['device_id'] not in other_nodes:
+      # Do not add device already in other_nodes
+      node = {}
+      node["primary_key"]  = device_id
+      node["name"]         = device['name']
+      node["object_id"]    = device_id[3:]
+      node["x"]            = ""
+      node["y"]            = position_y
+      node["description"]  = ""
+      node["subtype"]      = device['subtype']
+      node["image"]        = ""
+      if device.get('status') and device['status'] == 'OK':
+        node["color"]        = "#acd7e5"  #green
+      else:
+        node["color"]        = "#db2e14"  #red
+      node["hidden"]       = 'false'
+      node["cluster_id"]   = ""
 
-    if device.get('links'):
-      nb_links = nb_links + len(device['links'])
-    node["links"]        = device['links']
-    if device.get('device_nature'):
-      node["device_nature"] = device['device_nature']
-    node["status"]       = device['status']
-    nodes.append(node)
+      if device.get('links'):
+        nb_links = nb_links + len(device['links'])
+      node["links"]        = device['links']
+      if device.get('device_nature'):
+        node["device_nature"] = device['device_nature']
+      node["status"]       = device['status']
+      nodes.append(node)
 
 context['Nodes_MAJ_Object_ID'] = []
 context['Nodes'] = nodes

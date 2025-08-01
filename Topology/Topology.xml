@@ -12,6 +12,7 @@
         <values displayValue="OSPF">OSPF</values>
         <values displayValue="BGP">BGP</values>
         <values displayValue="Tunnels">Tunnels</values>
+        <values displayValue="Generic">Generic</values>
       </values>
     </variable>
     <variable displayName="IPAM system (for VRF based topology)" name="params.ipam_device_id" startIncrement="0" type="Device" mandatoryArray="false" visible="true" description="" groupSeparator="" groupDisplayName="" maxLength="100" displayOrder="14" increment="0" refServiceURI="" keepOnImport="false" editable="false" uniqueItemsInDropDownList="false" onlyDetailView="false" createOnlyView="false" localVarNameMatch="" remoteVarNameMatch="" localVarToFilter="" remoteVarToFilter="" remoteVarValueToFilter="" arrayCanAdd="true" arrayCanRemove="true" arrayCanMove="true" arrayCanEdit="true" arrayMinSizeRequired="false" displayNameHeader="" fullDisplayName="" isCompositeKey="false" isMandatory="true" isUserLocked="false" isEditLocked="false" isGrouped="false" isSearchable="false" isUniqueGlobal="false"/>
