@@ -34,7 +34,10 @@ MS_VIEW_LIST = { 'CDP'                         : {'CDP': 'General_CDP_Neighbors'
                  'OSPF_router_ID'              : {'OSPF_router_ID': 'General_OSPF_Base'},
                  'Tunnels'                     : {'Tunnels': 'InventoryTunnels'},
                  'Generic'                     : {'Generic_Node': 'Unmanaged_Node_Inventory_for_Topology', 'Generic_Link': 'Unmanaged_Link_Inventory_for_Topology'},
-                 'Custom'                      : {'Generic_Node': 'Unmanaged_Node_Inventory_for_Topology', 'Generic_Link': 'Unmanaged_Link_Inventory_for_Topology'}
+                 'Custom'                      : {
+                     **{'Generic_Node': 'Unmanaged_Node_Inventory_for_Topology', 'Generic_Link': 'Unmanaged_Link_Inventory_for_Topology'},
+                     **{'Tunnels': 'InventoryTunnels'}
+                  }
                }
 
 
@@ -638,11 +641,20 @@ def find_direct_neighbors_for_Generic(devicelongid, device_name, device_ip, MS):
   return None
   
 def find_direct_neighbors_for_Custom(devicelongid, device_name, device_ip, MS):
+    # --- Process Generic part ---
+    generic_MS = {k: v for k, v in MS.items() if k in MS_VIEW_LIST['Generic']}
+    find_direct_neighbors_for_Generic(devicelongid, device_name, device_ip, generic_MS)
 
-  find_direct_neighbors_for_Generic(devicelongid, device_name, device_ip, MS)
-  #find_direct_neighbors_for_Tunnels(devicelongid, device_name, device_ip, MS)
+    # --- Process Tunnels part ---
+    tunnel_MS = {k: v for k, v in MS.items() if k in MS_VIEW_LIST['Tunnels']}
+    tunnel_links = find_direct_neighbors_for_Tunnels(devicelongid, device_name, device_ip, tunnel_MS)
 
-  return None
+    # --- Merge Tunnel links into existing device ---
+    device_id = "sds" + str(devicelongid)
+    if device_id in existing_devices_id_msa:
+        if 'links' not in existing_devices_id_msa[device_id]:
+            existing_devices_id_msa[device_id]['links'] = []
+        existing_devices_id_msa[device_id]['links'].extend(tunnel_links)
 
 # In the following dictionary keys should match the topology type in Topology.xml
 function_map = { 'CDP'                         : find_direct_neighbors_for_CDP,
