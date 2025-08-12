@@ -108,8 +108,17 @@ def get_all_existing_devices_in_MSA_and_status():
       new_device['device_nature']              = device_detail['sdNature']
       new_device['status']                     = get_device_status(devicelongid)
       new_device['subtype']                    = "router"
-      # Filter Inventory models that should not be added to nodes i.e. that should not be displayed
-      if device_detail['manufacturerId'] == 2070002 and device_detail['modelId'] == 2070002:
+      # Filter Inventory models and specifics ones that should not be added to nodes i.e. that should not be displayed
+      hidden_devices = {
+        (2070002, 2070002),  # Inventory Management
+        (12032025, 12032025),    # Netskope Generic
+        (13032025, 13032025),    # Zscaler 
+        (28, 28042025),    # PaloAlto Prisma Access
+      }
+      # Get the current device's ID pair
+      current_device_ids = (device_detail['manufacturerId'], device_detail['modelId'])
+      # Check if the current device's pair is in the set of hidden devices
+      if current_device_ids in hidden_devices:
         new_device['displayInTopology'] = False
       else:
         new_device['displayInTopology'] = True
