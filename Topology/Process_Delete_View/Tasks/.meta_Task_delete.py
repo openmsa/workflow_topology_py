@@ -10,18 +10,12 @@
             <value>Process</value>
         </entry>
         <entry>
-            <key>DISPLAYNAME</key>
-            <value>common.py</value>
-        </entry>
-        <entry>
-            <key>TAG</key>
-        </entry>
-        <entry>
             <key>FILE_TYPE</key>
             <value>text</value>
         </entry>
         <entry>
-            <key>COMMENT</key>
+            <key>DISPLAYNAME</key>
+            <value>Task_delete.py</value>
         </entry>
     </map>
 </metadata>

@@ -1,0 +1,22 @@
+{
+  "uri" : "Process/Topology/Topology.xml",
+  "displayName" : "Topology",
+  "fileOwner" : "NCL",
+  "defaultTags" : [ ],
+  "imageUri" : "",
+  "description" : "File Description...",
+  "fileType" : "WORKFLOW",
+  "directoryRoot" : "PROCESS",
+  "tenantAccess" : [ "NCL" ],
+  "fileStatus" : "ACTIVE",
+  "extraData" : {
+    "lastUpdated" : 1750235712867,
+    "createdBy" : "admin",
+    "creationDate" : 1750235712867
+  },
+  "createdDate" : "2025-04-04T13:44:04Z",
+  "lastModifiedDate" : "2025-04-04T13:44:04Z",
+  "metaCreatedDate" : "2025-06-18T08:35:12.867511747Z",
+  "metaLastModifiedDate" : "2025-06-18T08:35:12.867511747Z",
+  "fileSyncStatus" : null
+}
