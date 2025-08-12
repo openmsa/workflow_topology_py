@@ -2,12 +2,16 @@
 <metadata>
     <map>
         <entry>
-            <key>DISPLAYNAME</key>
-            <value>Task_Update.py</value>
+            <key>TYPE</key>
+            <value>UPLOAD</value>
         </entry>
         <entry>
             <key>REPOSITORY</key>
             <value>Process</value>
+        </entry>
+        <entry>
+            <key>DISPLAYNAME</key>
+            <value>Task_Update.py</value>
         </entry>
         <entry>
             <key>TAG</key>
@@ -15,10 +19,6 @@
         <entry>
             <key>FILE_TYPE</key>
             <value>text</value>
-        </entry>
-        <entry>
-            <key>TYPE</key>
-            <value>UPLOAD</value>
         </entry>
         <entry>
             <key>COMMENT</key>
