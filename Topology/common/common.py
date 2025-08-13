@@ -33,6 +33,7 @@ MS_VIEW_LIST = { 'CDP'                         : {'CDP': 'General_CDP_Neighbors'
                  'OSPF_IP'                     : {'OSPF_IP': 'General_Interfaces'},
                  'OSPF_router_ID'              : {'OSPF_router_ID': 'General_OSPF_Base'},
                  'Tunnels'                     : {'Tunnels': 'InventoryTunnels'},
+                 'Generic_Tunnels'               : {'Generic_Node_Tunnels': 'Managed_Node_Inventory_for_Topology', 'Generic_Link_Tunnels': 'Managed_Link_Inventory_for_Topology'},
                  'Generic'                     : {'Generic_Node': 'Unmanaged_Node_Inventory_for_Topology', 'Generic_Link': 'Unmanaged_Link_Inventory_for_Topology'},
                  'Custom'                      : {
                      **{'Generic_Node': 'Unmanaged_Node_Inventory_for_Topology', 'Generic_Link': 'Unmanaged_Link_Inventory_for_Topology'},
@@ -599,6 +600,77 @@ def find_direct_neighbors_for_Generic(devicelongid, device_name, device_ip, MS):
     # Process Generic Nodes
     if message.get(MS['Generic_Node']):
       for node in message[MS['Generic_Node']].values():
+        object_id = node.get('object_id')
+        name = node.get('object_id') # Use object_id as Name
+        device_nature = node.get('device_nature')
+        sub_type = node.get('subtype')
+        status = node.get('status')
+        color = node.get('color')
+        description = node.get('description')
+        with open('/tmp/L', 'a') as f:
+           f.write(f"NODE: {object_id}; {name}; {device_nature}; {sub_type}; {status}; {color}; {description}\n")
+
+        node_id = object_id  # Use object_id as unique identifier
+        if node_id not in other_nodes:
+          node_obj = add_node(node_id, name, object_id, device_nature, sub_type, status, color, description)
+          other_nodes[node_id] = node_obj
+
+    # Process Generic Links
+    if message.get(MS['Generic_Link']):
+      for link in message[MS['Generic_Link']].values():
+        object_id = link.get('object_id')
+        source_node = link.get('source_node')
+        dest_node = link.get('dest_node')
+        label = link.get('label')
+        color = link.get('color')
+        status = link.get('status')
+        with open('/tmp/L', 'a') as f:
+           f.write(f"LINK: {object_id}; {source_node}; {dest_node}; {label}; {status}; {color}\n")
+
+        # Make sure both nodes are present before creating the link
+        if source_node in other_nodes and dest_node in other_nodes :
+          source = other_nodes[source_node]
+          dest = other_nodes[dest_node]
+          link_name = f"{source['name']} <-> {dest['name']}"
+          add_link(source, dest['name'], label, status, color)
+        else:
+          if source_node in other_nodes :
+            source = other_nodes[source_node]
+            for device in existing_devices_id_msa.values():
+              with open('/tmp/L', 'a') as f:
+                 f.write(f"externalReference: {device['externalReference']}\n")
+              if 'externalReference' in device and device['externalReference'] == dest_node:
+                 dest_node_name = device['name']
+            with open('/tmp/L', 'a') as f:
+              f.write(f"dest_node_name: {dest_node_name}\n")
+            link_name = f"{source['name']} <-> {dest_node_name}"
+            add_link(source, dest_node_name, label, status, color)
+
+    context['other_nodes_serialized'] = json.dumps(other_nodes)
+
+  return None
+
+def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_ip, MS):
+  global existing_devices_id_msa
+
+  deviceObj = Device(device_id=devicelongid)
+  device_detail = deviceObj.read()
+  device_detail = json.loads(device_detail)
+      
+  # Filter Inventory models that should not be added to nodes i.e. that should not be displayed
+  if device_detail['manufacturerId'] == 2070002 and device_detail['modelId'] == 2070002:
+    message = do_import(devicelongid, MS)
+    if context.get('other_nodes_serialized'):
+      other_nodes = json.loads(context['other_nodes_serialized'])
+    else:
+      other_nodes = {}
+
+    with open('/tmp/L', 'w') as f:
+      f.write(f"MESSAGE: {message}\n")
+
+    # Process Generic Nodes
+    if message.get(MS['Generic_Node_Tunnels']):
+      for node in message[MS['Generic_Node_Tunnels']].values():
         name = node.get('name')
         name = node.get('name') 
         device_nature = node.get('device_nature')
@@ -615,8 +687,8 @@ def find_direct_neighbors_for_Generic(devicelongid, device_name, device_ip, MS):
           other_nodes[node_id] = node_obj
 
     # Process Generic Links
-    if message.get(MS['Generic_Link']):
-      for link in message[MS['Generic_Link']].values():
+    if message.get(MS['Generic_Link_Tunnels']):
+      for link in message[MS['Generic_Link_Tunnels']].values():
         name = link.get('name')
         source_node = link.get('source_node')
         dest_node = link.get('dest_node')
@@ -676,7 +748,8 @@ function_map = { 'CDP'                         : find_direct_neighbors_for_CDP,
                  'BGP'                         : find_direct_neighbors_for_BGP,
                  'Tunnels'                     : find_direct_neighbors_for_Tunnels,
                  'Generic'                     : find_direct_neighbors_for_Generic,
-                 'Custom'                     : find_direct_neighbors_for_Custom
+                 'Generic_Tunnels'             : find_direct_neighbors_for_Generic_Tunnels,
+                 'Custom'                      : find_direct_neighbors_for_Custom
                }
 
 def createTopologyNetwork(nodeID, name, subType, image, neighbor={}, color="#acd7e5"):
