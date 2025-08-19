@@ -1,125 +1,86 @@
-import json
 import time
-import ipaddress
-import os
-import re
-import sys
-from msa_sdk.variables import Variables
+
 from msa_sdk.msa_api import MSA_API
-from msa_sdk.order import Order
-from msa_sdk.device import Device
-from msa_sdk.customer import Customer
 from msa_sdk.orchestration import Orchestration
-from msa_sdk.lookup import Lookup
-#from functorflow import Check_cidr
-
-# List all the parameters required by the task
-dev_var = Variables()
-#dev_var.add('ipam_device_id', var_type='Device')
-
-context = Variables.task_call(dev_var)
-
-currentdir = os.path.dirname(os.path.realpath(__file__))
-wf_dir  = os.path.dirname(os.path.dirname(currentdir))
-sys.path.append(wf_dir)
-from common.common import get_all_existing_devices_in_MSA_and_status, find_direct_neighbor, MS_VIEW_LIST
+from msa_sdk.order import Order
+from msa_sdk.variables import Variables
 
 
-#################### PRG START ###############################    
- 
+def main():
+    dev_var = Variables()
+    # dev_var.add('cpes.0.cpe_sync_status', 'String')
+    context = Variables.task_call(dev_var)
+    orchestration = Orchestration(context['UBIQUBEID'])
+    async_update_list = (context['PROCESSINSTANCEID'],
+                         context['TASKID'], context['EXECNUMBER'])
+    cpes = context.get('cpes')
+    bar_length = 0
+    position = 0
 
-#if not context['ipam_device_id'] :
-#  MSA_API.task_error('Mandatory parameters required',context, True)
+    for cpe in cpes:
+        if cpe['cpe_prov_status'] == "SUCCESS":
+            device_id = int(cpe.get('cpe')[3:])
+            sychronize(device_id)
+            bar_length += 1
 
-# Get all devices in the MSA for this customer_id
-existing_devices_id_msa = get_all_existing_devices_in_MSA_and_status()
+    for cpe in cpes:
+        if cpe['cpe_prov_status'] == "SUCCESS":
+            pretty_formatted_bar = ['*'] * position + ['-'] * (bar_length - position)
+            orchestration.update_asynchronous_task_details(
+                *async_update_list, '[{}]'.format(''.join(pretty_formatted_bar))
+            )
+            device_id = int(cpe.get('cpe')[3:])
+            sync_error = sync_status(device_id, orchestration, async_update_list)
+            if sync_error:
+                cpe['cpe_sync_status'] = f"FAILED: {sync_error}"
+            else:
+                cpe['cpe_sync_status'] = "SUCCESS"
+            if position < bar_length:
+                position += 1
 
-context['Nodes_MAJ']              = []
-context['other_nodes_serialized'] = ''
-
-nb_links = 0
-
-if str(context['view_type']) == 'OSPF':
-  find_direct_neighbors_for_OSPF()
-else:
-  for device_id, device in existing_devices_id_msa.items():
-    devicelongid = device_id[3:]
-    neighbors = []
-    if device['status'] == 'OK':
-  
-      if device.get('name'):
-        device_name = device['name']
-      else:
-        device_name = '???'
-      if device.get('management_address'):
-        device_ip = device['management_address']
-      else:
-        device_ip = 'xxx.xxx.xxx.xxx'
-
-      direct_neighbor = find_direct_neighbor(device_id, device_name, device_ip)
-      if direct_neighbor:
-        for link in direct_neighbor:
-          neighbors.append(link)
-      device['subtype'] = 'NETWORK'
-
-    device['links'] = neighbors
+    context.update(cpes=cpes)
+    ret = MSA_API.process_content('ENDED', '', context, True)
+    print(ret)
 
 
-if context.get('other_nodes_serialized') and context['other_nodes_serialized']:
-  position_y = '150'
-else:  
-  position_y = ''
+def sync_status(device_id, orchestration, async_update_list):
+    """
+    Poll synchronize status safely. Protects against missing keys like 'syncStatus' or 'message'.
+    """
+    order = Order(device_id)
+    error_message = ''
 
-#Convert hash table into array for Topology view_type
-nodes = []
-other_nodes = {}
+    while True:
+        status = order.get_synchronize_status()
+        sync_status = status.get('syncStatus')
 
-if context.get('other_nodes_serialized') and context['other_nodes_serialized']:
-  other_nodes = json.loads(context['other_nodes_serialized'])
-  for node in other_nodes.values():
-    if node.get('links'):
-      nb_links = nb_links + len(node['links'])
-    nodes.append(node)
+        if sync_status is None:
+            # Defensive: unexpected response format
+            error_message = f"No 'syncStatus' field. Full response: {status}"
+            break
 
-for device_id, device in existing_devices_id_msa.items():
-  if device['displayInTopology']:
-    if device['device_id'] not in other_nodes:
-      # Do not add device already in other_nodes
-      node = {}
-      node["primary_key"]  = device_id
-      node["name"]         = device['name']
-      node["object_id"]    = device_id[3:]
-      node["x"]            = ""
-      node["y"]            = position_y
-      node["description"]  = ""
-      node["subtype"]      = device['subtype']
-      node["image"]        = ""
-      if device.get('status') and device['status'] == 'OK':
-        node["color"]        = "#acd7e5"  #green
-      else:
-        node["color"]        = "#db2e14"  #red
-      node["hidden"]       = 'false'
-      node["cluster_id"]   = ""
+        if sync_status != 'RUNNING':
+            # Either ENDED or some failure state
+            if sync_status != 'ENDED':
+                error_message = status.get(
+                    'message',
+                    f"No 'message' field. Full response: {status}"
+                )
+                orchestration.update_asynchronous_task_details(
+                    *async_update_list, 'Import Config Failed'
+                )
+            break
 
-      if device.get('links'):
-        nb_links = nb_links + len(device['links'])
-      node["links"]        = device['links']
-      if device.get('device_nature'):
-        node["device_nature"] = device['device_nature']
-      node["status"]       = device['status']
-      nodes.append(node)
+        # Still running, wait and retry
+        time.sleep(5)
 
-context['Nodes_MAJ_Object_ID'] = []
-context['Nodes'] = nodes
+    return error_message
 
-if (nb_links == 0):
-  if MS_VIEW_LIST.get(context['view_type']):
-    MS_list = MS_VIEW_LIST[context['view_type']]
-    MS = ''
-    for ms in MS_list.values():
-      MS = MS + f'{ms} '
-  else:
-    MS = 'Undefined'
-  MSA_API.task_success(f'Can not find any link, may be MS {MS} not attached', context, True)
 
-MSA_API.task_success(f"OPERATION ENDED, topology schema {context['view_type']} updated", context, True)
+def sychronize(device_id):
+    order = Order(device_id)
+    order.command_synchronize_async()
+
+
+if __name__ == '__main__':
+    main()
