@@ -690,8 +690,11 @@ def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_
     if message.get(MS['Generic_Link_Tunnels']):
       for link in message[MS['Generic_Link_Tunnels']].values():
         name = link.get('name')
-        source_node = link.get('source_node')
-        dest_node = link.get('dest_node')
+        source_node = link.get('source_node')  # will always be a POP
+        dest_node = link.get('dest_node') # will always be an existing deployed ME
+        # Check if dest_node is empty
+        if not dest_node:
+          dest_node = 'unknown'
         label = link.get('label')
         color = link.get('color')
         status = link.get('status')
