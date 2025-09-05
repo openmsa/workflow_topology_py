@@ -650,6 +650,32 @@ def find_direct_neighbors_for_Generic(devicelongid, device_name, device_ip, MS):
 
   return None
 
+def find_Tunnel_Status(devicelongid, site, pop):
+	global MS_VIEW_LIST
+	MS = MS_VIEW_LIST["Tunnels"]
+	result = {}
+	statusTunnel = "unknown"
+
+	message = do_import(devicelongid, MS)
+	if message.get("InventoryTunnels"):
+		result = message["InventoryTunnels"]
+	
+	for site in result.values():
+		#check site name match
+		site_name = site['name']
+		if site_name == site:
+			tunnels = site.get("pops", [])
+			Tunnel1 = tunnels[0].get("name")
+			Tunnel2 = tunnels[1].get("name")
+			if Tunnel1 == pop:
+				statusTunnel = tunnels[0].get("status")
+			elif Tunnel2 == pop:	
+				statusTunnel = tunnels[1].get("status")
+			else:
+				statusTunnel = "unknown2"
+		break
+	return statusTunnel
+  
 def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_ip, MS):
   global existing_devices_id_msa
 
@@ -697,7 +723,9 @@ def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_
           dest_node = 'unknown'
         label = link.get('label')
         color = link.get('color')
-        status = link.get('status')
+        sse_id = link.get('sse_device_id')
+        status=find_Tunnel_Status(sse_id, label, source_node)
+        #status = link.get('status')
         with open('/tmp/L', 'a') as f:
            f.write(f"LINK: {name}; {source_node}; {dest_node}; {label}; {status}; {color}\n")
 
