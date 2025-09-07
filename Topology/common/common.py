@@ -650,9 +650,33 @@ def find_direct_neighbors_for_Generic(devicelongid, device_name, device_ip, MS):
 
   return None
 
+def find_Tunnel_Status(import_message, sse_site, pop):
+	result = {}
+	statusTunnel = "unknown"
+	if import_message.get("InventoryTunnels"):
+		result = import_message["InventoryTunnels"]
+	for site in result.values():
+		#check site name match
+		site_name = site['name']
+		if site_name == sse_site:
+			tunnels = site.get("pops", [])
+			Tunnel1 = tunnels['0'].get('pop_name')
+			Tunnel2 = tunnels['1'].get('pop_name')
+			if Tunnel1 == pop:
+				statusTunnel = tunnels['0'].get('status')
+			elif Tunnel2 == pop:	
+				statusTunnel = tunnels['1'].get('status')
+			else:
+				statusTunnel = "unknown"
+			break
+	return statusTunnel
+  
 def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_ip, MS):
   global existing_devices_id_msa
-
+  
+  global MS_VIEW_LIST
+  MS2 = MS_VIEW_LIST["Tunnels"]
+	
   deviceObj = Device(device_id=devicelongid)
   device_detail = deviceObj.read()
   device_detail = json.loads(device_detail)
@@ -697,7 +721,15 @@ def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_
           dest_node = 'unknown'
         label = link.get('label')
         color = link.get('color')
-        status = link.get('status')
+        sse_id = link.get('sse_device_id')
+        message2 = do_import(sse_id, MS2)
+        #status = link.get('status')
+        status=find_Tunnel_Status(message2 ,label, source_node)
+        if status.lower() == "up":
+           color="#16de0b"
+        elif status.lower() == "down": 
+           color="#de0b0b"
+           
         with open('/tmp/L', 'a') as f:
            f.write(f"LINK: {name}; {source_node}; {dest_node}; {label}; {status}; {color}\n")
 
@@ -718,7 +750,8 @@ def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_
             with open('/tmp/L', 'a') as f:
               f.write(f"dest_node_name: {dest_node_name}\n")
             link_name = f"{source['name']} <-> {dest_node_name}"
-            add_link(source, dest_node_name, label, status, color)
+            label_status = f"{label} - status => {status}"
+            add_link(source, dest_node_name, label_status, status, color)
 
     context['other_nodes_serialized'] = json.dumps(other_nodes)
 
