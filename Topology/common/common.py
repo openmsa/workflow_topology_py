@@ -750,7 +750,8 @@ def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_
             with open('/tmp/L', 'a') as f:
               f.write(f"dest_node_name: {dest_node_name}\n")
             link_name = f"{source['name']} <-> {dest_node_name}"
-            add_link(source, dest_node_name, label, status, color)
+            label_status = f"{label} - status => {status}"
+            add_link(source, dest_node_name, label_status, status, color)
 
     context['other_nodes_serialized'] = json.dumps(other_nodes)
 
