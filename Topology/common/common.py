@@ -747,6 +747,9 @@ def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_
                  f.write(f"externalReference: {device['externalReference']}\n")
               if 'externalReference' in device and device['externalReference'] == dest_node:
                  dest_node_name = device['name']
+                 # Check if dest_node is empty
+                 if not dest_node_name:
+                    dest_node_name = 'unknown'
             with open('/tmp/L', 'a') as f:
               f.write(f"dest_node_name: {dest_node_name}\n")
             link_name = f"{source['name']} <-> {dest_node_name}"
