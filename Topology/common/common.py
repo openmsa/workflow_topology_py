@@ -650,26 +650,23 @@ def find_direct_neighbors_for_Generic(devicelongid, device_name, device_ip, MS):
 
   return None
 
-def find_Tunnel_Status(import_message, sse_site, pop):
-	result = {}
-	statusTunnel = "unknown"
-	if import_message.get("InventoryTunnels"):
-		result = import_message["InventoryTunnels"]
-	for site in result.values():
-		#check site name match
-		site_name = site['name']
-		if site_name == sse_site:
-			tunnels = site.get("pops", [])
-			Tunnel1 = tunnels['0'].get('pop_name')
-			Tunnel2 = tunnels['1'].get('pop_name')
-			if Tunnel1 == pop:
-				statusTunnel = tunnels['0'].get('status')
-			elif Tunnel2 == pop:	
-				statusTunnel = tunnels['1'].get('status')
-			else:
-				statusTunnel = "unknown"
-			break
-	return statusTunnel
+def find_Tunnel_Status(import_message, sse_site, pop): 
+    try:
+        inventory_tunnels = import_message.get("InventoryTunnels")
+        if not isinstance(inventory_tunnels, dict):
+            return "unknown"
+        for site_data in inventory_tunnels.values():
+            if isinstance(site_data, dict) and site_data.get("name") == sse_site:
+                tunnels = site_data.get("pops")
+                if not isinstance(tunnels, dict):
+                    return "unknown"
+                for tunnel_details in tunnels.values():
+                    if isinstance(tunnel_details, dict) and tunnel_details.get("pop_name") == pop:
+                        return tunnel_details.get("status", "unknown")
+                return "unknown"
+    except Exception:
+        return "unknown"
+    return "unknown"
   
 def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_ip, MS):
   global existing_devices_id_msa
