@@ -670,90 +670,101 @@ def find_Tunnel_Status(import_message, sse_site, pop):
   
 def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_ip, MS):
   global existing_devices_id_msa
-  
   global MS_VIEW_LIST
-  MS2 = MS_VIEW_LIST["Tunnels"]
-	
-  deviceObj = Device(device_id=devicelongid)
-  device_detail = deviceObj.read()
-  device_detail = json.loads(device_detail)
-      
-  # Filter Inventory models that should not be added to nodes i.e. that should not be displayed
-  if device_detail['manufacturerId'] == 2070002 and device_detail['modelId'] == 2070002:
-    message = do_import(devicelongid, MS)
-    if context.get('other_nodes_serialized'):
+  
+  MS2 = MS_VIEW_LIST.get("Tunnels")
+  if not MS2:
+      return None
+
+  try:
+      deviceObj = Device(device_id=devicelongid)
+      device_detail_raw = deviceObj.read()
+      if not device_detail_raw:
+          return None
+      device_detail = json.loads(device_detail_raw)
+  except:
+      return None
+
+  if not (device_detail.get('manufacturerId') == 2070002 and device_detail.get('modelId') == 2070002):
+      return None
+
+  try:
+      message = do_import(devicelongid, MS)
+      if not message:
+          return None
+  except:
+      return None
+
+  if context.get('other_nodes_serialized'):
       other_nodes = json.loads(context['other_nodes_serialized'])
-    else:
+  else:
       other_nodes = {}
 
-    with open('/tmp/L', 'w') as f:
-      f.write(f"MESSAGE: {message}\n")
+  # Process Generic Nodes
+  generic_nodes = message.get(MS['Generic_Node_Tunnels'], {})
+  if isinstance(generic_nodes, dict):
+      for node_id, node in generic_nodes.items():
+          try:
+              name = node.get('name')
+              if not name:
+                  continue # Skip to the next node
 
-    # Process Generic Nodes
-    if message.get(MS['Generic_Node_Tunnels']):
-      for node in message[MS['Generic_Node_Tunnels']].values():
-        name = node.get('name')
-        name = node.get('name') 
-        device_nature = node.get('device_nature')
-        sub_type = node.get('subtype')
-        status = node.get('status')
-        color = node.get('color')
-        description = node.get('description')
-        with open('/tmp/L', 'a') as f:
-           f.write(f"NODE: {name}; {name}; {device_nature}; {sub_type}; {status}; {color}; {description}\n")
+              device_nature = node.get('device_nature')
+              sub_type = node.get('subtype')
+              status = node.get('status')
+              color = node.get('color')
+              description = node.get('description')
+              
+              if name not in other_nodes:
+                  node_obj = add_node(name, name, name, device_nature, sub_type, status, color, description)
+                  other_nodes[name] = node_obj
+          except:
+              continue # Move to the next node
 
-        node_id = name  # Use object_id as unique identifier
-        if node_id not in other_nodes:
-          node_obj = add_node(node_id, name, name, device_nature, sub_type, status, color, description)
-          other_nodes[node_id] = node_obj
+  # Process Generic Links
+  generic_links = message.get(MS['Generic_Link_Tunnels'], {})
+  if isinstance(generic_links, dict):
+      for link_id, link in generic_links.items():
+          try:
+              source_node = link.get('source_node')
+              dest_node = link.get('dest_node', 'unknown') # Default to 'unknown' if missing
+              label = link.get('label')
+              sse_id = link.get('sse_device_id')
+              
+              if not all([source_node, label, sse_id]):
+                  continue
 
-    # Process Generic Links
-    if message.get(MS['Generic_Link_Tunnels']):
-      for link in message[MS['Generic_Link_Tunnels']].values():
-        name = link.get('name')
-        source_node = link.get('source_node')  # will always be a POP
-        dest_node = link.get('dest_node') # will always be an existing deployed ME
-        # Check if dest_node is empty
-        if not dest_node:
-          dest_node = 'unknown'
-        label = link.get('label')
-        color = link.get('color')
-        sse_id = link.get('sse_device_id')
-        message2 = do_import(sse_id, MS2)
-        #status = link.get('status')
-        status=find_Tunnel_Status(message2 ,label, source_node)
-        if status.lower() == "up":
-           color="#16de0b"
-        elif status.lower() == "down": 
-           color="#de0b0b"
-           
-        with open('/tmp/L', 'a') as f:
-           f.write(f"LINK: {name}; {source_node}; {dest_node}; {label}; {status}; {color}\n")
+              message2 = do_import(sse_id, MS2)
+              status = find_Tunnel_Status(message2, label, source_node)
+              
+              # Determine color based on status
+              if status.lower() == "up":
+                  color = "#16de0b"
+              elif status.lower() == "down":
+                  color = "#de0b0b"
+              else:
+                  color = link.get('color', '#808080') # Default grey color
 
-        # Make sure both nodes are present before creating the link
-        if source_node in other_nodes and dest_node in other_nodes :
-          source = other_nodes[source_node]
-          dest = other_nodes[dest_node]
-          link_name = f"{source['name']} <-> {dest['name']}"
-          add_link(source, dest['name'], label, status, color)
-        else:
-          if source_node in other_nodes :
-            source = other_nodes[source_node]
-            for device in existing_devices_id_msa.values():
-              with open('/tmp/L', 'a') as f:
-                 f.write(f"externalReference: {device['externalReference']}\n")
-              if 'externalReference' in device and device['externalReference'] == dest_node:
-                 dest_node_name = device['name']
-                 # Check if dest_node_name is empty
-                 if not dest_node_name:
-                    dest_node_name = 'unknown'
-            with open('/tmp/L', 'a') as f:
-              f.write(f"dest_node_name: {dest_node_name}\n")
-            link_name = f"{source['name']} <-> {dest_node_name}"
-            label_status = f"[{status.upper()}] {label}"
-            add_link(source, dest_node_name, label_status, status, color)
+              # Make sure both nodes are present before creating the link
+              if source_node in other_nodes and dest_node in other_nodes:
+                  source = other_nodes[source_node]
+                  dest = other_nodes[dest_node]
+                  add_link(source, dest['name'], label, status, color)
+              elif source_node in other_nodes:
+                  source = other_nodes[source_node]
+                  dest_node_name = 'unknown' # Initialize to prevent UnboundLocalError
+                  for device in existing_devices_id_msa.values():
+                      if device.get('externalReference') == dest_node:
+                          dest_node_name = device.get('name', 'unknown')
+                          break # Exit loop once found
+                  
+                  label_status = f"[{status.upper()}] {label}"
+                  add_link(source, dest_node_name, label_status, status, color)
 
-    context['other_nodes_serialized'] = json.dumps(other_nodes)
+          except Exception:
+              continue # Move to the next link
+              
+  context['other_nodes_serialized'] = json.dumps(other_nodes)
 
   return None
   
