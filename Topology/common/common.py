@@ -153,6 +153,15 @@ def do_import(devicelongid, MS):
 
   return message
 
+def microservice_operation(order, operation_method, object_params):
+  order.command_execute(operation_method, object_params)
+  content = json.loads(order.content)
+  if not order.response.ok:
+    raise RuntimeError("Microservice Operation Failed:[{}]".format(content))
+  if operation_method == 'IMPORT':
+    response = json.loads(order.content)
+    result = json.loads(response['message'])
+    return result
 
 # Wrapper for calling the function depending on the topology type
 def find_direct_neighbor(device_id, device_name, device_ip):
@@ -673,6 +682,7 @@ def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_
   global existing_devices_id_msa
   global MS_VIEW_LIST
   MS2 = MS_VIEW_LIST.get("Tunnels")
+  order = Order(devicelongid)
 
   if not MS2:
       return None
@@ -732,6 +742,8 @@ def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_
   # Process Generic Links
   generic_links = message.get(MS['Generic_Link_Tunnels'], {})
   if isinstance(generic_links, dict):
+      object_parameters = {}
+      object_parameters[''+MS['Generic_Link_Tunnels']+''] = {}
       for link_id, link in generic_links.items():
           try:
               name = link.get('name')
@@ -755,7 +767,20 @@ def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_
 
               with open('/tmp/L', 'a') as f:
                   f.write(f"LINK: {name}; {source_node}; {dest_node}; {label}; {status}; {color}\n")
-
+              
+              object_id = link.get('object_id')
+              sse_device_id = link.get('sse_device_id')
+              object_parameters[''+MS['Generic_Link_Tunnels']+''][object_id] = {}
+              object_parameters[''+MS['Generic_Link_Tunnels']+''][object_id]['object_id'] = object_id
+              object_parameters[''+MS['Generic_Link_Tunnels']+''][object_id]['name'] = name
+              object_parameters[''+MS['Generic_Link_Tunnels']+''][object_id]['label'] = label
+              object_parameters[''+MS['Generic_Link_Tunnels']+''][object_id]['source_node'] = source_node
+              object_parameters[''+MS['Generic_Link_Tunnels']+''][object_id]['node_to_real_me'] = True
+              object_parameters[''+MS['Generic_Link_Tunnels']+''][object_id]['dest_node'] = dest_node
+              object_parameters[''+MS['Generic_Link_Tunnels']+''][object_id]['color'] = color
+              object_parameters[''+MS['Generic_Link_Tunnels']+''][object_id]['status'] = status.upper()
+              object_parameters[''+MS['Generic_Link_Tunnels']+''][object_id]['sse_device_id'] = sse_device_id
+              
               # Make sure both nodes are present before creating the link
               if source_node in other_nodes and dest_node in other_nodes:
                   source = other_nodes[source_node]
@@ -782,7 +807,11 @@ def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_
               continue # Move to the next link
 
   context['other_nodes_serialized'] = json.dumps(other_nodes)
-
+  try:
+  	# refresh tunnel current status in Managed_Link_Inventory_for_Topology
+    microservice_operation(order, 'UPDATE', object_parameters)
+  except:
+    return None
   return None
   
 def find_direct_neighbors_for_Custom(devicelongid, device_name, device_ip, MS):
