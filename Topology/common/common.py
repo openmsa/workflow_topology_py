@@ -663,19 +663,19 @@ def find_Tunnel_Status(import_message, sse_site, pop):
     try:
         inventory_tunnels = import_message.get("InventoryTunnels")
         if not isinstance(inventory_tunnels, dict):
-            return "unknown"
+            return "na"
         for site_data in inventory_tunnels.values():
             if isinstance(site_data, dict) and site_data.get("name") == sse_site:
                 tunnels = site_data.get("pops")
                 if not isinstance(tunnels, dict):
-                    return "unknown"
+                    return "na"
                 for tunnel_details in tunnels.values():
                     if isinstance(tunnel_details, dict) and tunnel_details.get("pop_name") == pop:
-                        return tunnel_details.get("status", "unknown")
-                return "unknown"
+                        return tunnel_details.get("status", "na")
+                return "na"
     except Exception:
-        return "unknown"
-    return "unknown"
+        return "na"
+    return "na"
   
 def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_ip, MS):
 
@@ -748,7 +748,7 @@ def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_
           try:
               name = link.get('name')
               source_node = link.get('source_node')  # will always be a POP
-              dest_node = link.get('dest_node', 'unknown')  # will always be an existing deployed ME
+              dest_node = link.get('dest_node', 'na')  # will always be an existing deployed ME
               label = link.get('label')
               sse_id = link.get('sse_device_id')
               
@@ -788,19 +788,19 @@ def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_
                   add_link(source, dest['name'], label, status, color)
               elif source_node in other_nodes:
                   source = other_nodes[source_node]
-                  dest_node_name = 'unknown'  # Initialize to prevent UnboundLocalError
+                  dest_node_name = 'na'  # Initialize to prevent UnboundLocalError
                   
                   for device in existing_devices_id_msa.values():
                       with open('/tmp/L', 'a') as f:
                           f.write(f"externalReference: {device.get('externalReference')}\n")
                       if device.get('externalReference') == dest_node:
-                          dest_node_name = device.get('name', 'unknown')
+                          dest_node_name = device.get('name', 'na')
                           break # Exit loop once found
                   
                   with open('/tmp/L', 'a') as f:
                       f.write(f"dest_node_name: {dest_node_name}\n")
 
-                  label_status = f"[{status.upper()}] {label}"
+                  label_status = f"{label} [{status.upper()}]"
                   add_link(source, dest_node_name, label_status, status, color)
 
           except:
