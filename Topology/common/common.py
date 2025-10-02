@@ -660,22 +660,23 @@ def find_direct_neighbors_for_Generic(devicelongid, device_name, device_ip, MS):
   return None
 
 def find_Tunnel_Status(import_message, sse_site, pop): 
+    not_available_status = "na"
     try:
         inventory_tunnels = import_message.get("InventoryTunnels")
         if not isinstance(inventory_tunnels, dict):
-            return "na"
+            return not_available_status
         for site_data in inventory_tunnels.values():
             if isinstance(site_data, dict) and site_data.get("name") == sse_site:
                 tunnels = site_data.get("pops")
                 if not isinstance(tunnels, dict):
-                    return "na"
+                    return not_available_status
                 for tunnel_details in tunnels.values():
                     if isinstance(tunnel_details, dict) and tunnel_details.get("pop_name") == pop:
-                        return tunnel_details.get("status", "na")
-                return "na"
+                        return tunnel_details.get("status", not_available_status)
+                return not_available_status
     except Exception:
-        return "na"
-    return "na"
+        return not_available_status
+    return not_available_status
   
 def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_ip, MS):
 
@@ -683,6 +684,7 @@ def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_
   global MS_VIEW_LIST
   MS2 = MS_VIEW_LIST.get("Tunnels")
   order = Order(devicelongid)
+  not_available_status = "na"
 
   if not MS2:
       return None
@@ -748,7 +750,7 @@ def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_
           try:
               name = link.get('name')
               source_node = link.get('source_node')  # will always be a POP
-              dest_node = link.get('dest_node', 'na')  # will always be an existing deployed ME
+              dest_node = link.get('dest_node', not_available_status)  # will always be an existing deployed ME
               label = link.get('label')
               sse_id = link.get('sse_device_id')
               
@@ -788,13 +790,13 @@ def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_
                   add_link(source, dest['name'], label, status, color)
               elif source_node in other_nodes:
                   source = other_nodes[source_node]
-                  dest_node_name = 'na'  # Initialize to prevent UnboundLocalError
+                  dest_node_name = not_available_status  # Initialize to prevent UnboundLocalError
                   
                   for device in existing_devices_id_msa.values():
                       with open('/tmp/L', 'a') as f:
                           f.write(f"externalReference: {device.get('externalReference')}\n")
                       if device.get('externalReference') == dest_node:
-                          dest_node_name = device.get('name', 'na')
+                          dest_node_name = device.get('name', not_available_status)
                           break # Exit loop once found
                   
                   with open('/tmp/L', 'a') as f:
