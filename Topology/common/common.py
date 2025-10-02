@@ -250,7 +250,6 @@ def find_direct_neighbors_for_SNMP(devicelongid, device_name, device_ip, MS):
 
         network_and_mask_objID =  network_and_mask.replace('.','_')
         createTopologyNetwork(network_and_mask_objID, network_and_mask, 'network','')
-    f.close()
 
   #context['snmp_result_'+devicelongid+'_serialized'] = json.dumps(direct_neighbor)
   if os.path.exists(output_file):
@@ -603,10 +602,11 @@ def find_direct_neighbors_for_Generic(devicelongid, device_name, device_ip, MS):
       other_nodes = json.loads(context['other_nodes_serialized'])
     else:
       other_nodes = {}
-
+    #DUBUG
+    '''
     with open('/tmp/tunnel_topo_data', 'w') as f:
       f.write(f"MESSAGE: {message}\n")
-
+    '''
     # Process Generic Nodes
     if message.get(MS['Generic_Node']):
       for node in message[MS['Generic_Node']].values():
@@ -617,9 +617,11 @@ def find_direct_neighbors_for_Generic(devicelongid, device_name, device_ip, MS):
         status = node.get('status')
         color = node.get('color')
         description = node.get('description')
+        #DEBUG
+        '''
         with open('/tmp/tunnel_topo_data', 'a') as f:
            f.write(f"NODE: {object_id}; {name}; {device_nature}; {sub_type}; {status}; {color}; {description}\n")
-
+        '''
         node_id = object_id  # Use object_id as unique identifier
         if node_id not in other_nodes:
           node_obj = add_node(node_id, name, object_id, device_nature, sub_type, status, color, description)
@@ -634,9 +636,11 @@ def find_direct_neighbors_for_Generic(devicelongid, device_name, device_ip, MS):
         label = link.get('label')
         color = link.get('color')
         status = link.get('status')
+        #DEBUG
+        '''
         with open('/tmp/tunnel_topo_data', 'a') as f:
            f.write(f"LINK: {object_id}; {source_node}; {dest_node}; {label}; {status}; {color}\n")
-
+        '''
         # Make sure both nodes are present before creating the link
         if source_node in other_nodes and dest_node in other_nodes :
           source = other_nodes[source_node]
@@ -647,12 +651,18 @@ def find_direct_neighbors_for_Generic(devicelongid, device_name, device_ip, MS):
           if source_node in other_nodes :
             source = other_nodes[source_node]
             for device in existing_devices_id_msa.values():
+              #DEBUG
+              '''
               with open('/tmp/tunnel_topo_data', 'a') as f:
                  f.write(f"externalReference: {device['externalReference']}\n")
+              '''   
               if 'externalReference' in device and device['externalReference'] == dest_node:
                  dest_node_name = device['name']
+            #DEBUG
+            '''     
             with open('/tmp/tunnel_topo_data', 'a') as f:
               f.write(f"dest_node_name: {dest_node_name}\n")
+            '''  
             link_name = f"{source['name']} <-> {dest_node_name}"
             add_link(source, dest_node_name, label, status, color)
 
@@ -712,10 +722,11 @@ def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_
       other_nodes = json.loads(context['other_nodes_serialized'])
   else:
       other_nodes = {}
-  
+  #DEBUG
+  '''
   with open('/tmp/tunnel_topo_data', 'w') as f:
       f.write(f"MESSAGE: {message}\n")
-
+  '''
   # Process Generic Nodes
   generic_nodes = message.get(MS['Generic_Node_Tunnels'], {})
   if isinstance(generic_nodes, dict):
@@ -730,10 +741,11 @@ def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_
               status = node.get('status')
               color = node.get('color')
               description = node.get('description')
-              
+              #DEBUG
+              '''
               with open('/tmp/tunnel_topo_data', 'a') as f:
                   f.write(f"NODE: {name}; {name}; {device_nature}; {sub_type}; {status}; {color}; {description}\n")
-
+              '''
               if name not in other_nodes:
                   node_obj = add_node(name, name, name, device_nature, sub_type, status, color, description)
                   other_nodes[name] = node_obj
@@ -765,10 +777,11 @@ def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_
                   color = "#de0b0b"
               else:
                   color = link.get('color', '#808080') # Default grey color
-
+              #DEBUG
+              '''
               with open('/tmp/tunnel_topo_data', 'a') as f:
                   f.write(f"LINK: {name}; {source_node}; {dest_node}; {label}; {status}; {color}\n")
-              
+              '''
               object_id = link.get('object_id')
               sse_device_id = link.get('sse_device_id')
               object_parameters[''+MS['Generic_Link_Tunnels']+''][object_id] = {}
@@ -792,18 +805,21 @@ def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_
                   dest_node_name = NOT_AVAILABLE_STATUS  # Initialize to prevent UnboundLocalError
                   
                   for device in existing_devices_id_msa.values():
+                      #DEBUG
+                      '''
                       with open('/tmp/tunnel_topo_data', 'a') as f:
                           f.write(f"externalReference: {device.get('externalReference')}\n")
+                      '''    
                       if device.get('externalReference') == dest_node:
                           dest_node_name = device.get('name', NOT_AVAILABLE_STATUS)
                           break # Exit loop once found
-                  
+                  #DEBUG
+                  '''
                   with open('/tmp/tunnel_topo_data', 'a') as f:
                       f.write(f"dest_node_name: {dest_node_name}\n")
-
-                  label_status = f"{label} [{status.upper()}]"
+                  '''    
+                  label_status = label if status.lower() == NOT_AVAILABLE_STATUS else f"{label} [{status.upper()}]"
                   add_link(source, dest_node_name, label_status, status, color)
-
           except:
               continue # Move to the next link
 
@@ -907,3 +923,4 @@ def add_link(node, link_name, link_label, link_status, link_color):
   link['label'] = link_label
   link['color'] = color
   node["links"].append(link)
+  
