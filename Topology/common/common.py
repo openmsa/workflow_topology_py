@@ -776,7 +776,7 @@ def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_
               elif status.lower() == "down":
                   color = "#de0b0b"
               else:
-                  color = link.get('color', '#808080') # Default grey color
+                  color = "#808080" # Default grey color
               #Keep this comment for debug
               '''
               with open('/tmp/tunnel_topo_data', 'a') as f:
