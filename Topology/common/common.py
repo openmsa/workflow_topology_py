@@ -602,7 +602,7 @@ def find_direct_neighbors_for_Generic(devicelongid, device_name, device_ip, MS):
       other_nodes = json.loads(context['other_nodes_serialized'])
     else:
       other_nodes = {}
-    #DUBUG
+    #Keep this comment for debug
     '''
     with open('/tmp/tunnel_topo_data', 'w') as f:
       f.write(f"MESSAGE: {message}\n")
@@ -617,7 +617,7 @@ def find_direct_neighbors_for_Generic(devicelongid, device_name, device_ip, MS):
         status = node.get('status')
         color = node.get('color')
         description = node.get('description')
-        #DEBUG
+        #Keep this comment for debug
         '''
         with open('/tmp/tunnel_topo_data', 'a') as f:
            f.write(f"NODE: {object_id}; {name}; {device_nature}; {sub_type}; {status}; {color}; {description}\n")
@@ -636,7 +636,7 @@ def find_direct_neighbors_for_Generic(devicelongid, device_name, device_ip, MS):
         label = link.get('label')
         color = link.get('color')
         status = link.get('status')
-        #DEBUG
+        #Keep this comment for debug
         '''
         with open('/tmp/tunnel_topo_data', 'a') as f:
            f.write(f"LINK: {object_id}; {source_node}; {dest_node}; {label}; {status}; {color}\n")
@@ -651,14 +651,14 @@ def find_direct_neighbors_for_Generic(devicelongid, device_name, device_ip, MS):
           if source_node in other_nodes :
             source = other_nodes[source_node]
             for device in existing_devices_id_msa.values():
-              #DEBUG
+              #Keep this comment for debug
               '''
               with open('/tmp/tunnel_topo_data', 'a') as f:
                  f.write(f"externalReference: {device['externalReference']}\n")
               '''   
               if 'externalReference' in device and device['externalReference'] == dest_node:
                  dest_node_name = device['name']
-            #DEBUG
+            #Keep this comment for debug
             '''     
             with open('/tmp/tunnel_topo_data', 'a') as f:
               f.write(f"dest_node_name: {dest_node_name}\n")
@@ -722,7 +722,7 @@ def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_
       other_nodes = json.loads(context['other_nodes_serialized'])
   else:
       other_nodes = {}
-  #DEBUG
+  #Keep this comment for debug
   '''
   with open('/tmp/tunnel_topo_data', 'w') as f:
       f.write(f"MESSAGE: {message}\n")
@@ -741,7 +741,7 @@ def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_
               status = node.get('status')
               color = node.get('color')
               description = node.get('description')
-              #DEBUG
+              #Keep this comment for debug
               '''
               with open('/tmp/tunnel_topo_data', 'a') as f:
                   f.write(f"NODE: {name}; {name}; {device_nature}; {sub_type}; {status}; {color}; {description}\n")
@@ -777,7 +777,7 @@ def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_
                   color = "#de0b0b"
               else:
                   color = link.get('color', '#808080') # Default grey color
-              #DEBUG
+              #Keep this comment for debug
               '''
               with open('/tmp/tunnel_topo_data', 'a') as f:
                   f.write(f"LINK: {name}; {source_node}; {dest_node}; {label}; {status}; {color}\n")
@@ -805,7 +805,7 @@ def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_
                   dest_node_name = NOT_AVAILABLE_STATUS  # Initialize to prevent UnboundLocalError
                   
                   for device in existing_devices_id_msa.values():
-                      #DEBUG
+                      #Keep this comment for debug
                       '''
                       with open('/tmp/tunnel_topo_data', 'a') as f:
                           f.write(f"externalReference: {device.get('externalReference')}\n")
@@ -813,7 +813,7 @@ def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_
                       if device.get('externalReference') == dest_node:
                           dest_node_name = device.get('name', NOT_AVAILABLE_STATUS)
                           break # Exit loop once found
-                  #DEBUG
+                  #Keep this comment for debug
                   '''
                   with open('/tmp/tunnel_topo_data', 'a') as f:
                       f.write(f"dest_node_name: {dest_node_name}\n")
