@@ -177,7 +177,7 @@ def find_direct_neighbor(device_id, device_name, device_ip):
     direct_neighbor = direct_neighbor_function(devicelongid, device_name, device_ip, MS)
     return  direct_neighbor
   else:
-    MSA_API.task_error('TODO CONVERT PHP INTO PYTHON',context, True)
+    MSA_API.task_error('Unsupported topology type: {}'.format(topology_type),context, True)
 
 
 def find_direct_neighbors_for_CDP(devicelongid, device_name, device_ip, MS):
