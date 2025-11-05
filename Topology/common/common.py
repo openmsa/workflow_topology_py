@@ -198,7 +198,7 @@ def find_direct_neighbors_for_CDP(devicelongid, device_name, device_ip, MS):
         neighbor_device_name = device2['neighbor_system_name']
         link                 = {}
         link['link']         = neighbor_device_name
-        link['label']        = "CDP - " + device_name+": "+device_ip+" - "
+        link['label']        = "CDP \n" + device_name+": "+device_ip+"\n"
         link['label'] = link['label'] + device2['neighbor_system_name'] +": "+device2['management_ip']
         direct_neighbor.append(link)
         
@@ -243,7 +243,7 @@ def find_direct_neighbors_for_SNMP(devicelongid, device_name, device_ip, MS):
         #direct_neighbor[network_and_mask] = 1
         link                 = {}
         link['link']         = network_and_mask
-        link['label']        = "SNMP - " + device_name+": "+device_ip+" - "
+        link['label']        = "SNMP \n" + device_name+": "+device_ip+"\n"
         if isinstance(result, dict) and result.get('name') and result.get('ip_list') and result['ip_list'].get('0') and result['ip_list']['0'].get('ip_address') :
            link['label'] = link['label'] + network_and_mask
         direct_neighbor.append(link)
@@ -271,7 +271,7 @@ def find_direct_neighbors_for_VLAN(devicelongid, device_name, device_ip, MS):
           #direct_neighbor[vlan_id] = 1
           link                 = {}
           link['link']         = vlan_id
-          link['label']        = "VLAN  - " + device_name+": "+device_ip+" - "
+          link['label']        = "VLAN \n" + device_name+": "+device_ip+"\n"
           if result.get('name') and result.get('ip_list') and result['ip_list'].get('0') and result['ip_list']['0'].get('ip_address') :
             link['label'] = link['label'] + result['name']+": "+result['ip_list']['0']['ip_address']
           elif result.get('name') :
@@ -302,7 +302,7 @@ def find_direct_neighbors_for_VXLAN(devicelongid, device_name, device_ip, MS):
           #direct_neighbor[VLAN_id] = 1
           link                 = {}
           link['link']         = VLAN_id
-          link['label']        = "VXLAN  - " + device_name+": "+device_ip+" - "
+          link['label']        = "VXLAN \n" + device_name+": "+device_ip+"\n"
           if result.get('object_id') and result.get('vni') :
             link['label'] = link['label'] + VLAN_id +": "+'vni'+ result['vni']
           direct_neighbor.append(link)
@@ -310,7 +310,7 @@ def find_direct_neighbors_for_VXLAN(devicelongid, device_name, device_ip, MS):
           VLAN_id_objID =  VLAN_id.replace('.','_')
           link                 = {}
           link['link']         = vni_objID
-          link['label']        = "VXLAN - "+VLAN_id+": "+vni
+          link['label']        = "VXLAN \n "+VLAN_id+": "+vni
 
           createTopologyNetwork(VLAN_id_objID, VLAN_id, 'network', '', link, "#e5d7ac")
 
@@ -352,7 +352,7 @@ def find_direct_neighbors_for_VXLAN_VRF(devicelongid, device_name, device_ip, MS
               #direct_neighbor[VLAN_id] = 1
               link                 = {}
               link['link']         = 'vlan'+result['object_id']  
-              link['label']        = "VLAN - " + device_name+": "+device_ip+" - "
+              link['label']        = "VLAN \n" + device_name+": "+device_ip+"\n"
               if result.get('object_id') and result.get('vni') :
                 link['label'] = link['label'] + 'vlan'+result['object_id']+": "+'vni'+ result['vni']
               direct_neighbor.append(link)
@@ -360,7 +360,7 @@ def find_direct_neighbors_for_VXLAN_VRF(devicelongid, device_name, device_ip, MS
               VLAN_id_objID =  VLAN_id.replace('.','_')
               link                 = {}
               link['link']         =  vni_objID 
-              link['label']        = "VLAN - " + device_name+": "+device_ip+" - "
+              link['label']        = "VLAN \n" + device_name+": "+device_ip+"\n"
               if result.get('object_id') and result.get('vni') :
                 link['label'] = link['label'] + 'vlan'+result['object_id']+": "+'vni'+ result['vni']
               createTopologyNetwork(VLAN_id_objID, VLAN_id, 'network', '', link, "#e5d7ac")
@@ -379,7 +379,7 @@ def find_direct_neighbors_for_VRF(devicelongid, device_name, device_ip, MS):
           #direct_neighbor[vni] = 1
           link                 = {}
           link['link']         = vni 
-          link['label']        = "VRF - " + device_name+": "+device_ip+" - "
+          link['label']        = "VRF \n" + device_name+": "+device_ip+"\n"
           link['label'] = link['label'] + 'vrf'+result['object_id']+": "+vni
           direct_neighbor.append(link)
 
@@ -491,9 +491,9 @@ def find_direct_neighbors_for_OSPF(dummy1, dummy2, dummy3, dummy4):
                               router_id = devices[device_id]['router_id']
                             else:
                               router_id = ''
-                            link['label']     = "OSPF Neighbor - " + device['name'] + ': ' + router_id 
-                            link['label']    = link['label'] + " - " + interface_name + ":" + devices[device_id][interface_name]['cidr']
-                            link['label']    = link['label'] + " - " + detail['port_detail'] +" - State:"+ interface['state']
+                            link['label']     = "OSPF Neighbor\n" + device['name'] + ': ' + router_id 
+                            link['label']    = link['label'] + "\n" + interface_name + ":" + devices[device_id][interface_name]['cidr']
+                            link['label']    = link['label'] + "\n" + detail['port_detail'] +"\n State:"+ interface['state']
                             if not device.get('links'):
                               device['links'] = []
                             #add link only on the last direction, faster
@@ -510,7 +510,7 @@ def find_direct_neighbors_for_OSPF(dummy1, dummy2, dummy3, dummy4):
                         else:
                           router_id = ''
                         detail['port_detail'] = device['name'] +': ' + router_id
-                        detail['port_detail'] = detail['port_detail'] + " - " + interface_name +': ' +devices[device_id][interface_name]['cidr']
+                        detail['port_detail'] = detail['port_detail'] + "\n" + interface_name +': ' +devices[device_id][interface_name]['cidr']
                         IP_neighbors[all_ips_string].append(detail)
                         
   context['IP_neighbors'] = IP_neighbors
@@ -533,7 +533,7 @@ def find_direct_neighbors_for_BGP(devicelongid, device_name, device_ip, MS):
         #direct_neighbor[neighbor_IP] = 1
         link                 = {}
         link['link']         = neighbor_IP 
-        link['label']        = "BGP, state: "+ result["state"]  +" - " + device_name+": "+device_ip+" - "
+        link['label']        = "BGP, state: "+ result["state"]  +"\n" + device_name+": "+device_ip+"\n"
         link['label'] = link['label'] + 'vrf: '+neighbor_IP
         direct_neighbor.append(link)  
 
