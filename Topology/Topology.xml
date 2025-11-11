@@ -89,7 +89,7 @@
     <visibility>5</visibility>
     <wfConstraintsPath></wfConstraintsPath>
     <serviceTaskType>python</serviceTaskType>
-    <processToAssociateToTrashIcon/>
+    <processToAssociateToTrashIcon></processToAssociateToTrashIcon>
     <name>Topology</name>
     <group>MSA|Topology</group>
   </information>

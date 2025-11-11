@@ -16,6 +16,7 @@ from msa_sdk.orchestration import Orchestration
 from msa_sdk.lookup import Lookup
 from msa_sdk import constants
 from msa_sdk import util
+from msa_sdk.pops import Pops
 
 
 dev_var = Variables()
@@ -33,7 +34,7 @@ MS_VIEW_LIST = { 'CDP'                         : {'CDP': 'General_CDP_Neighbors'
                  'OSPF_IP'                     : {'OSPF_IP': 'General_Interfaces'},
                  'OSPF_router_ID'              : {'OSPF_router_ID': 'General_OSPF_Base'},
                  'Tunnels'                     : {'Tunnels': 'InventoryTunnels'},
-                 'Generic_Tunnels'               : {'Generic_Node_Tunnels': 'Managed_Node_Inventory_for_Topology', 'Generic_Link_Tunnels': 'Managed_Link_Inventory_for_Topology'},
+                 'Generic_Tunnels'             : {'Tunnels': 'InventoryTunnels'},
                  'Generic'                     : {'Generic_Node': 'Unmanaged_Node_Inventory_for_Topology', 'Generic_Link': 'Unmanaged_Link_Inventory_for_Topology'},
                  'Custom'                      : {
                      **{'Generic_Node': 'Unmanaged_Node_Inventory_for_Topology', 'Generic_Link': 'Unmanaged_Link_Inventory_for_Topology'},
@@ -401,7 +402,7 @@ def find_direct_neighbors_for_VRF(devicelongid, device_name, device_ip, MS):
 
   
 
-def find_direct_neighbors_for_OSPF(dummy1, dummy2, dummy3, dummy4):
+def find_direct_neighbors_for_OSPF():
   global MS_VIEW_LIST
   global existing_devices_id_msa
   #For OSPF, we should get the interface name from underlay_OSPF_Neighbors and the range of IP for each interface from 'General_Interfaces'
@@ -688,59 +689,56 @@ def find_Tunnel_Status(import_message, sse_site, pop):
         return NOT_AVAILABLE_STATUS
     return NOT_AVAILABLE_STATUS
   
-def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_ip, MS):
+def find_direct_neighbors_for_Generic_Tunnels():
 
   global existing_devices_id_msa
   global MS_VIEW_LIST
-  MS2 = MS_VIEW_LIST.get("Tunnels")
-  order = Order(devicelongid)
+  MS = MS_VIEW_LIST.get("Generic_Tunnels")
+  ubiqube_id = context['UBIQUBEID']
+  context['tenantPrefix']=ubiqube_id[:3]
   
-  if not MS2:
-      return None
-
-  try:
-      deviceObj = Device(device_id=devicelongid)
-      device_detail_raw = deviceObj.read()
-      if not device_detail_raw:
-          return None
-      device_detail = json.loads(device_detail_raw)
-  except:
-      return None
-
-  # Filter Inventory models that should not be added to nodes
-  if not (device_detail.get('manufacturerId') == 2070002 and device_detail.get('modelId') == 2070002):
+  if not MS:
       return None
       
-  try:
-      message = do_import(devicelongid, MS)
-      if not message:
-          return None
-  except:
-      return None
-
   if context.get('other_nodes_serialized'):
       other_nodes = json.loads(context['other_nodes_serialized'])
   else:
       other_nodes = {}
+  
+  ## Getting all the tunnels for given tenant 
+  pops = Pops()
+  pops.list_tunnels(context['tenantPrefix'])
+  pops_list=json.loads(pops.content)
+
   #Keep this comment for debug
   '''
   with open('/tmp/tunnel_topo_data', 'w') as f:
-      f.write(f"MESSAGE: {message}\n")
+      f.write(f"MESSAGE: {pops_list}\n")
   '''
-  # Process Generic Nodes
-  generic_nodes = message.get(MS['Generic_Node_Tunnels'], {})
-  if isinstance(generic_nodes, dict):
-      for node_id, node in generic_nodes.items():
-          try:
-              name = node.get('name')
-              if not name:
-                  continue # Skip to the next node
 
-              device_nature = node.get('device_nature')
-              sub_type = node.get('subtype')
-              status = node.get('status')
-              color = node.get('color')
-              description = node.get('description')
+  # Process Generic Nodes => Pops
+  # Get all used POP name
+  pop_identifiers = set()
+  for feature in pops_list['features']:
+    try:
+        identifier = feature['properties']['pop']['identifier'].lower()
+        pop_identifiers.add(identifier)
+    except KeyError:
+        # Handle cases where the path properties.pop.identifier might not exist
+        return None
+  # Convert the set to a list if needed
+  pop_identifiers_list = list(pop_identifiers)
+
+  
+  if pop_identifiers_list:
+      for identifier in pop_identifiers_list:
+          try:
+              name = identifier
+              device_nature = "NETWORK"
+              sub_type = "NETWORK"
+              status = "OK"
+              color = "#050505"
+              description = identifier
               #Keep this comment for debug
               '''
               with open('/tmp/tunnel_topo_data', 'a') as f:
@@ -753,82 +751,74 @@ def find_direct_neighbors_for_Generic_Tunnels(devicelongid, device_name, device_
               continue # Move to the next node
 
   # Process Generic Links
-  generic_links = message.get(MS['Generic_Link_Tunnels'], {})
-  if isinstance(generic_links, dict):
-      object_parameters = {}
-      object_parameters[''+MS['Generic_Link_Tunnels']+''] = {}
-      for link_id, link in generic_links.items():
-          try:
-              name = link.get('name')
-              source_node = link.get('source_node')  # will always be a POP
-              dest_node = link.get('dest_node', NOT_AVAILABLE_STATUS)  # will always be an existing deployed ME
-              label = link.get('label')
-              sse_id = link.get('sse_device_id')
-              
-              if not all([source_node, label, sse_id]):
-                  continue
+  
+  for feature in pops_list['features']:
+      try:
+          name = feature['properties']['label']
+          source_node = feature['properties']['pop']['identifier'].lower()  # will always be a POP
+          dest_node = context['tenantPrefix']+str(feature['properties']['cpeDeviceId'])  # will always be an existing deployed ME
+          label = feature['properties']['label']
+          sse_id = feature['properties']['sse_device_id']
+          
+          if not all([source_node, label, sse_id]):
+              continue
 
-              message2 = do_import(sse_id, MS2)
-              status = find_Tunnel_Status(message2, label, source_node)
-              # Determine color based on status
-              if status.lower() == "up":
-                  color = "#16de0b"
-              elif status.lower() == "down":
-                  color = "#de0b0b"
-              else:
-                  color = "#808080" # Default grey color
-              #Keep this comment for debug
-              '''
-              with open('/tmp/tunnel_topo_data', 'a') as f:
-                  f.write(f"LINK: {name}; {source_node}; {dest_node}; {label}; {status}; {color}\n")
-              '''
-              object_id = link.get('object_id')
-              sse_device_id = link.get('sse_device_id')
-              object_parameters[''+MS['Generic_Link_Tunnels']+''][object_id] = {}
-              object_parameters[''+MS['Generic_Link_Tunnels']+''][object_id]['object_id'] = object_id
-              object_parameters[''+MS['Generic_Link_Tunnels']+''][object_id]['name'] = name
-              object_parameters[''+MS['Generic_Link_Tunnels']+''][object_id]['label'] = label
-              object_parameters[''+MS['Generic_Link_Tunnels']+''][object_id]['source_node'] = source_node
-              object_parameters[''+MS['Generic_Link_Tunnels']+''][object_id]['node_to_real_me'] = True
-              object_parameters[''+MS['Generic_Link_Tunnels']+''][object_id]['dest_node'] = dest_node
-              object_parameters[''+MS['Generic_Link_Tunnels']+''][object_id]['color'] = color
-              object_parameters[''+MS['Generic_Link_Tunnels']+''][object_id]['status'] = status.upper()
-              object_parameters[''+MS['Generic_Link_Tunnels']+''][object_id]['sse_device_id'] = sse_device_id
+          message = do_import(sse_id, MS)
+          status = find_Tunnel_Status(message, label, source_node)
+          # Determine color based on status
+          if status.lower() == "up":
+              color = "#16de0b"
+          elif status.lower() == "down":
+              color = "#de0b0b"
+          else:
+              color = "#808080" # Default grey color
+          #Keep this comment for debug
+          '''
+          with open('/tmp/tunnel_topo_data', 'a') as f:
+              f.write(f"LINK: {name}; {source_node}; {dest_node}; {label}; {status}; {color}\n")
+          '''
+          data = dict(
+            status=status.upper(),
+            extraProperties=dict(
+              color=color,
+              label=label,
+              sse_device_id=sse_id
+            )
+          )
+
+          # refresh tunnel current status
+          pops.update_tunnel(feature['properties']['cpeDeviceId'], feature['properties']['pop']['vendor'], feature['properties']['pop']['identifier'], data)
+          
+          # Make sure both nodes are present before creating the link
+          if source_node in other_nodes and dest_node in other_nodes:
+              source = other_nodes[source_node]
+              dest = other_nodes[dest_node]
+              add_link(source, dest['name'], label, status, color)
+          elif source_node in other_nodes:
+              source = other_nodes[source_node]
+              dest_node_name = NOT_AVAILABLE_STATUS  # Initialize to prevent UnboundLocalError
               
-              # Make sure both nodes are present before creating the link
-              if source_node in other_nodes and dest_node in other_nodes:
-                  source = other_nodes[source_node]
-                  dest = other_nodes[dest_node]
-                  add_link(source, dest['name'], label, status, color)
-              elif source_node in other_nodes:
-                  source = other_nodes[source_node]
-                  dest_node_name = NOT_AVAILABLE_STATUS  # Initialize to prevent UnboundLocalError
-                  
-                  for device in existing_devices_id_msa.values():
-                      #Keep this comment for debug
-                      '''
-                      with open('/tmp/tunnel_topo_data', 'a') as f:
-                          f.write(f"externalReference: {device.get('externalReference')}\n")
-                      '''    
-                      if device.get('externalReference') == dest_node:
-                          dest_node_name = device.get('name', NOT_AVAILABLE_STATUS)
-                          break # Exit loop once found
+              for device in existing_devices_id_msa.values():
                   #Keep this comment for debug
                   '''
                   with open('/tmp/tunnel_topo_data', 'a') as f:
-                      f.write(f"dest_node_name: {dest_node_name}\n")
+                      f.write(f"externalReference: {device.get('externalReference')}\n")
                   '''    
-                  label_status = label if status.lower() == NOT_AVAILABLE_STATUS else f"{label} [{status.upper()}]"
-                  add_link(source, dest_node_name, label_status, status, color)
-          except:
-              continue # Move to the next link
+                  if device.get('externalReference') == dest_node:
+                      dest_node_name = device.get('name', NOT_AVAILABLE_STATUS)
+                      break # Exit loop once found
+              #Keep this comment for debug
+              '''
+              with open('/tmp/tunnel_topo_data', 'a') as f:
+                  f.write(f"dest_node_name: {dest_node_name}\n")
+              '''    
+              label_status = label if status.lower() == NOT_AVAILABLE_STATUS else f"{label} [{status.upper()}]"
+              add_link(source, dest_node_name, label_status, status, color)
+      except:
+        continue # Move to the next link
 
   context['other_nodes_serialized'] = json.dumps(other_nodes)
-  try:
-    # refresh tunnel current status in Managed_Link_Inventory_for_Topology
-    microservice_operation(order, 'UPDATE', object_parameters)
-  except:
-    return None
+  
   return None
   
 def find_direct_neighbors_for_Custom(devicelongid, device_name, device_ip, MS):
