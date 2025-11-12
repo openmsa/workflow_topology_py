@@ -22,7 +22,7 @@ context = Variables.task_call(dev_var)
 currentdir = os.path.dirname(os.path.realpath(__file__))
 wf_dir  = os.path.dirname(os.path.dirname(currentdir))
 sys.path.append(wf_dir)
-from common.common import get_all_existing_devices_in_MSA_and_status, find_direct_neighbor, MS_VIEW_LIST
+from common.common import get_all_existing_devices_in_MSA_and_status, find_direct_neighbor, MS_VIEW_LIST, find_direct_neighbors_for_Generic_Tunnels, find_direct_neighbors_for_OSPF
 
 
 #################### PRG START ###############################    
@@ -41,6 +41,8 @@ nb_links = 0
 
 if str(context['view_type']) == 'OSPF':
   find_direct_neighbors_for_OSPF()
+elif str(context['view_type']) == 'Generic_Tunnels':
+  find_direct_neighbors_for_Generic_Tunnels()
 else:
   for device_id, device in existing_devices_id_msa.items():
     devicelongid = device_id[3:]
