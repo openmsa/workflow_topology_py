@@ -759,6 +759,7 @@ def find_direct_neighbors_for_Generic_Tunnels():
           dest_node = context['tenantPrefix']+str(feature['properties']['cpeDeviceId'])  # will always be an existing deployed ME
           label = feature['properties']['label']
           sse_id = feature['properties']['sse_device_id']
+          role = feature['properties']['tunnel_role']
           
           if not all([source_node, label, sse_id]):
               continue
@@ -783,6 +784,7 @@ def find_direct_neighbors_for_Generic_Tunnels():
               color=color,
               label=label,
               sse_device_id=sse_id
+              tunnel_role=role
             )
           )
 
